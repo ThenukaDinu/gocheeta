@@ -1,6 +1,6 @@
 package com.thenuka.gocheetaproject.configurations;
 
-import com.thenuka.gocheetaproject.interfaces.ILocation;
+import com.thenuka.gocheetaproject.interfaces.ILocationService;
 import com.thenuka.gocheetaproject.services.LocationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public ILocation iLocation () {
+    public ILocationService iLocation () {
         return new LocationService();
     }
 }

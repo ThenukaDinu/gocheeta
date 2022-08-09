@@ -1,7 +1,7 @@
 package com.thenuka.gocheetaproject.services;
 
-import com.thenuka.gocheetaproject.interfaces.ILocationRespository;
-import com.thenuka.gocheetaproject.interfaces.ILocation;
+import com.thenuka.gocheetaproject.repositories.ILocationRespository;
+import com.thenuka.gocheetaproject.interfaces.ILocationService;
 import com.thenuka.gocheetaproject.modals.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LocationService implements ILocation {
+public class LocationService implements ILocationService {
 
     ILocationRespository iLocationRespository;
 

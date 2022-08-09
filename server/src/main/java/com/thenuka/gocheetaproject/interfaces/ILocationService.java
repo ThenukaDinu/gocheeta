@@ -4,6 +4,6 @@ import com.thenuka.gocheetaproject.modals.Location;
 
 import java.util.List;
 
-public interface ILocation {
+public interface ILocationService {
     public List<Location> getLocations();
 }

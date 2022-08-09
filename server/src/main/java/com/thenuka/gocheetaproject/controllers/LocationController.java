@@ -1,6 +1,6 @@
 package com.thenuka.gocheetaproject.controllers;
 
-import com.thenuka.gocheetaproject.interfaces.ILocation;
+import com.thenuka.gocheetaproject.interfaces.ILocationService;
 import com.thenuka.gocheetaproject.modals.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,15 +14,15 @@ import java.util.List;
 @RequestMapping("/location")
 @RestController
 public class LocationController {
-    private ILocation locationService;
+    private ILocationService locationService;
 
     @Autowired
-    public LocationController(ILocation locationService) {
+    public LocationController(ILocationService locationService) {
         this.locationService = locationService;
     }
 
     @GetMapping("/getLocations")
-    public ResponseEntity sayHello() {
+    public ResponseEntity getLocations() {
         try {
             List<Location> locations = locationService.getLocations();
             return new ResponseEntity<>(locations, HttpStatus.OK);
