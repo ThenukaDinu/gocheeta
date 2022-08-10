@@ -29,6 +29,11 @@ public class GocheetaprojectApplication {
 		return String.format("<h2>Service up and running</h2> </br> %S", LocalDateTime.now().getSecond());
 	}
 
+	@GetMapping("/secured")
+	public String secured() {
+		return "<h2>You are logged in</h2>";
+	}
+
 	@GetMapping("/error")
 	public String error() {
 		return "<h2>Oops something went wrong please contact support service...</h2>";

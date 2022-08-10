@@ -27,7 +27,7 @@ public class Booking {
     @JoinColumn(name = "driverId", nullable = false)
     private Driver driver;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "userId", nullable = false)
+//    private User user;
 }

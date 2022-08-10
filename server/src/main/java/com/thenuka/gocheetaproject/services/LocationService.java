@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 public class LocationService implements ILocationService {
 
-    ILocationRespository iLocationRespository;
+    ILocationRespository locationRespository;
 
     @Autowired
-    public LocationService(ILocationRespository iLocationRespository) {
-        this.iLocationRespository = iLocationRespository;
+    public LocationService(ILocationRespository locationRespository) {
+        this.locationRespository = locationRespository;
     }
 
     public LocationService () {
@@ -24,6 +24,6 @@ public class LocationService implements ILocationService {
 
     @Override
     public List<Location> getLocations() {
-        return iLocationRespository.findAll();
+        return locationRespository.findAll();
     }
 }
