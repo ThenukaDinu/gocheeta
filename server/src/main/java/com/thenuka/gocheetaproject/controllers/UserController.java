@@ -37,15 +37,4 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/register")
-    public ResponseEntity register() {
-        try {
-            UserRoleDTO userRoleDTO = userService.getUser(1);
-            return new ResponseEntity<>(userRoleDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

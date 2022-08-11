@@ -2,6 +2,7 @@ package com.thenuka.gocheetaproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,12 @@ public class GocheetaprojectApplication {
 	@GetMapping("/secured")
 	public String secured() {
 		return "<h2>You are logged in</h2>";
+	}
+
+	@GetMapping("/secured/admin")
+	@PreAuthorize("hasRole('ADMIN')")
+	public String adminSecured() {
+		return "<h2>You are logged in as an Admin user</h2>";
 	}
 
 	@GetMapping("/error")

@@ -1,5 +1,6 @@
 package com.thenuka.gocheetaproject.modals;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,8 +17,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private LocalDateTime dateOfCreated;
+    private String description;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     Set<User> users;
 }
