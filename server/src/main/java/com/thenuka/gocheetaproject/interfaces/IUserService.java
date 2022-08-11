@@ -12,4 +12,5 @@ public interface IUserService {
     User save(UserDto user);
     List<User> findAll();
     User findOne(String username);
+    UserRoleDTO convertEntityToDto(User user);
 }

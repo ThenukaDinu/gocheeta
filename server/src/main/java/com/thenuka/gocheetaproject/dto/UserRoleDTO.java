@@ -19,5 +19,6 @@ public class UserRoleDTO {
     private int age;
     private String mobile;
     private String email;
+    private String address;
     private ArrayList<RoleDTO> roles;
 }

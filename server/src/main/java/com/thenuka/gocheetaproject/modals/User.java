@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -28,26 +29,23 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name="user_role",
+            name="user_roles",
             joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id")
     )
     Set<Role> roles;
 
-//    public Set<Booking> getBookings() {
-//        return bookings;
-//    }
+    @OneToMany
+    @JoinColumn(name = "user")
+    private Set<Booking> bookings;
 
-//    public void setBookings(Set<Booking> bookings) {
-//        this.bookings = bookings;
-//    }
-
-//    @OneToMany
-//    @JoinColumn(name = "user", nullable = false)
-//    private Set<Booking> bookings;
+    @OneToMany
+    @JoinColumn(name = "user")
+    private Set<Rating> ratings;
 
     @PostLoad
     private void onLoad() {

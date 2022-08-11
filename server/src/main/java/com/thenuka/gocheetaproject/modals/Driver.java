@@ -1,18 +1,26 @@
 package com.thenuka.gocheetaproject.modals;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Table(name = "drivers")
 public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
     private String NIC;
     private String Address;
-    private String mobile;
+    private String backupMobile;
 
     @OneToMany(mappedBy = "driver")
     private Set<Booking> bookings;

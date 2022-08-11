@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service(value = "userService")
-public class UserServiceImpl implements IUserService, UserDetailsService {
+public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     private IUserRepository userRepository;
@@ -87,7 +87,8 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    private UserRoleDTO convertEntityToDto (User user) {
+    @Override
+    public UserRoleDTO convertEntityToDto (User user) {
         if (user == null) { return null; }
         UserRoleDTO userRoleDTO = new UserRoleDTO();
         userRoleDTO.setUserId(user.getId());
@@ -97,6 +98,7 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
         userRoleDTO.setLastName(user.getLastName());
         userRoleDTO.setFullName(user.getFullName());
         userRoleDTO.setMobile(user.getMobile());
+        userRoleDTO.setAddress(user.getAddress());
         ArrayList<RoleDTO> roleDTOS = new ArrayList<RoleDTO>();
         for (Role role : user.getRoles()) {
             RoleDTO roleDTO = new RoleDTO();

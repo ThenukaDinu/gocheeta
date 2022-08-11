@@ -17,16 +17,18 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
+    private String address;
 
     public User getUserFromDto(){
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setEmail(email);
+        user.setEmail(username);
         user.setMobile(mobile);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setDateOfBirth(dateOfBirth);
+        user.setAddress(address);
         return user;
     }
 }

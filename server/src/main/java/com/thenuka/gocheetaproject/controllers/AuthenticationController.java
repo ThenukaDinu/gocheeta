@@ -46,9 +46,7 @@ public class AuthenticationController {
             User user = userService.findOne(loginUser.getUsername());
             return ResponseEntity.ok(new JwtResponseDTO(
                     token,
-                    (long)user.getId(),
-                    user.getUsername(),
-                    user.getEmail()
+                    userService.convertEntityToDto(user)
             ));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
