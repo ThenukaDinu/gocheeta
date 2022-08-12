@@ -1,9 +1,6 @@
 package com.thenuka.gocheetaproject.modals;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,7 +8,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "drivers")
 public class Driver {
 
@@ -28,9 +26,13 @@ public class Driver {
     private Set<Vehicle> vehicles;
 
     @ManyToOne
-    @JoinColumn(name = "branchId")
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
     @OneToMany(mappedBy = "driver")
     private Set<Rating> ratings;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

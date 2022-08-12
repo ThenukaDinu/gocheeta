@@ -3,12 +3,13 @@ package com.thenuka.gocheetaproject.services;
 import com.thenuka.gocheetaproject.dto.BookingDTO;
 import com.thenuka.gocheetaproject.dto.VehicleDTO;
 import com.thenuka.gocheetaproject.enums.publicEnum;
+import com.thenuka.gocheetaproject.interfaces.IBookingService;
 import com.thenuka.gocheetaproject.interfaces.ICategoryService;
 import com.thenuka.gocheetaproject.interfaces.IVehicleService;
-import com.thenuka.gocheetaproject.modals.Booking;
-import com.thenuka.gocheetaproject.modals.Category;
-import com.thenuka.gocheetaproject.modals.Vehicle;
+import com.thenuka.gocheetaproject.modals.*;
+import com.thenuka.gocheetaproject.repositories.IBranchRepository;
 import com.thenuka.gocheetaproject.repositories.ICategoryRepository;
+import com.thenuka.gocheetaproject.repositories.IDriverRepository;
 import com.thenuka.gocheetaproject.repositories.IVehicleRepository;
 import com.thenuka.gocheetaproject.requests.VehicleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,14 @@ import java.util.stream.Collectors;
 public class VehicleService implements IVehicleService {
     @Autowired
     private IVehicleRepository vehicleRepository;
-
     @Autowired
     private ICategoryRepository categoryRepository;
+    @Autowired
+    private IBookingService bookingService;
+    @Autowired
+    private IBranchRepository branchRepository;
+    @Autowired
+    private IDriverRepository driverRepository;
 
     @Override
     public VehicleDTO findOne(int id) {
@@ -75,21 +81,8 @@ public class VehicleService implements IVehicleService {
         if (vehicle.getCategory() != null) vehicleDTO.setCategoryId(vehicle.getCategory().getId());
         ArrayList<BookingDTO> bookingDTOS = new ArrayList<BookingDTO>();
         for (Booking book : vehicle.getBookings()) {
-            BookingDTO bookingDTO = new BookingDTO();
-            bookingDTO.setId(book.getId());
-            bookingDTO.setPrice(book.getPrice());
-            bookingDTO.setStatus(book.getStatus());
-            bookingDTO.setTripPlacedTime(book.getTripPlacedTime());
-            bookingDTO.setTripCanceledTime(book.getTripCanceledTime());
-            bookingDTO.setTripScheduledTime(book.getTripScheduledTime());
-            bookingDTO.setTripFinishedTime(book.getTripFinishedTime());
-            bookingDTO.setTripStartTime(book.getTripStartTime());
-            bookingDTO.setPickUpLocation(book.getPickUpLocation());
-            bookingDTO.setDropOffLocation(book.getDropOffLocation());
-            if (book.getVehicle() != null) bookingDTO.setVehicleId(book.getVehicle().getId());
-            if (book.getDriver() != null)  bookingDTO.setDriverId(book.getDriver().getId());
-            if (book.getUser() != null)  bookingDTO.setUserId(book.getUser().getId());
-            bookingDTOS.add(bookingDTO);
+            BookingDTO bookingDTO = bookingService.convertEntityToDto(book);
+            if (bookingDTO != null) bookingDTOS.add(bookingDTO);
         }
         vehicleDTO.setBookings(bookingDTOS);
         return vehicleDTO;
@@ -105,11 +98,14 @@ public class VehicleService implements IVehicleService {
             Category category = categoryRepository.findById(vehicleRequest.getCategoryId()).get();
             vehicle.setCategory(category);
         }
-        // need to implement.
-        /*
-        * branch
-        * driver
-        * */
+        if (branchRepository.existsById(vehicleRequest.getBranchId())) {
+            Branch branch = branchRepository.findById(vehicleRequest.getBranchId()).get();
+            vehicle.setBranch(branch);
+        }
+        if (driverRepository.existsById(vehicleRequest.getDriverId())) {
+            Driver driver = driverRepository.findById(vehicleRequest.getDriverId()).get();
+            vehicle.setDriver(driver);
+        }
         return vehicle;
     }
 }
