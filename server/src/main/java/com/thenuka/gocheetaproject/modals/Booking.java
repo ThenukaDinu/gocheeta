@@ -1,10 +1,7 @@
 package com.thenuka.gocheetaproject.modals;
 
 import com.thenuka.gocheetaproject.enums.publicEnum;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -14,7 +11,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "bookings")
 public class Booking {
     @Id
@@ -37,14 +35,14 @@ public class Booking {
     private publicEnum.BookingStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "driverId")
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "vehicleId")
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 }

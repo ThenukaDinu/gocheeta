@@ -1,10 +1,7 @@
 package com.thenuka.gocheetaproject.modals;
 
 import com.thenuka.gocheetaproject.enums.publicEnum;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -13,7 +10,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "vehicles")
 public class Vehicle {
     @Id
@@ -25,18 +23,17 @@ public class Vehicle {
     private String brand;
 
     @ManyToOne
-    @JoinColumn(name = "branchId")
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
     @ManyToOne
-    @JoinColumn(name = "driverId")
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @ManyToOne
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "category_id")
     private  Category category;
 
-    @OneToMany
-    @JoinColumn(name = "vehicle")
+    @OneToMany(mappedBy = "vehicle")
     private Set<Booking> bookings;
 }

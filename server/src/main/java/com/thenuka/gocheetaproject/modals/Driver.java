@@ -19,7 +19,6 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String NIC;
-    private String Address;
     private String backupMobile;
 
     @OneToMany(mappedBy = "driver")
