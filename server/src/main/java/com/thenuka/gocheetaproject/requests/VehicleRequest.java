@@ -10,6 +10,7 @@ public class VehicleRequest {
     private String vehicleType;
     private String brand;
     private String model;
+    private String numberPlateNo;
     @Nullable
     private int branchId;
     @Nullable

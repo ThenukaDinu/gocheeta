@@ -21,6 +21,7 @@ public class Vehicle {
     private publicEnum.VehicleType vehicleType;
     @Nullable
     private String brand;
+    private String numberPlateNo;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

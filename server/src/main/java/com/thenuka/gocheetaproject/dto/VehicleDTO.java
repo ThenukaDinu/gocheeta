@@ -18,5 +18,6 @@ public class VehicleDTO {
     private int branchId;
     private int driverId;
     private int categoryId;
+    private String numberPlateNo;
     private ArrayList<BookingDTO> bookings;
 }
