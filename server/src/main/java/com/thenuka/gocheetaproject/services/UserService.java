@@ -7,6 +7,7 @@ import com.thenuka.gocheetaproject.interfaces.IUserService;
 import com.thenuka.gocheetaproject.modals.Role;
 import com.thenuka.gocheetaproject.modals.User;
 import com.thenuka.gocheetaproject.repositories.IUserRepository;
+import com.thenuka.gocheetaproject.requests.UserRoleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,6 +73,16 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public UserRoleDTO update(int id, UserDto userRequest) {
+        if (userRepository.existsById(id)) {
+            User user = userRepository.findById(id).get();
+            User updatedUser = convertRequestToEntity(userRequest, user);
+            return convertEntityToDto(userRepository.save(updatedUser));
+        }
+        return null;
+    }
+
+    @Override
     public User save(UserDto user) {
         User nUser = user.getUserFromDto();
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -98,6 +109,23 @@ public class UserService implements IUserService, UserDetailsService {
         }
         user.setRoles(roleSet);
         return user;
+    }
+
+    @Override
+    public UserRoleDTO assignRoles(int id, UserRoleRequest userRoleRequest) {
+        if (userRepository.existsById(id) == false) return null;
+        User user = userRepository.findById(id).get();
+        Set<Role> roleSet = new HashSet<>();
+        if (roleService.findByName("USER") != null) {
+            roleSet.add(roleService.findByName("USER"));
+        }
+        for (String roleName : userRoleRequest.getRolesList()) {
+            if (roleService.findByName(roleName) != null) {
+                roleSet.add(roleService.findByName(roleName));
+            }
+        }
+        user.setRoles(roleSet);
+        return convertEntityToDto(userRepository.save(user));
     }
 
     @Override
@@ -137,11 +165,24 @@ public class UserService implements IUserService, UserDetailsService {
             RoleDTO roleDTO = new RoleDTO();
             roleDTO.setRoleId(role.getId());
             roleDTO.setRoleName(role.getName());
-            roleDTO.setUserId(user.getId());
+            roleDTO.setDescription(role.getDescription());
             roleDTOS.add(roleDTO);
         }
         userRoleDTO.setRoles(roleDTOS);
         return userRoleDTO;
+    }
+
+    @Override
+    public User convertRequestToEntity(UserDto userRequest, User user) {
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getUsername());
+        user.setPassword(bcryptEncoder.encode(userRequest.getPassword()));
+        user.setMobile(userRequest.getMobile());
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setDateOfBirth(userRequest.getDateOfBirth());
+        user.setAddress(userRequest.getAddress());
+        return user;
     }
 
 }

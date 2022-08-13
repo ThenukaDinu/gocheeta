@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class RoleDTO {
     private String roleName;
+    private String description;
     private int roleId;
-    private int userId;
 }
