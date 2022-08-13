@@ -25,14 +25,14 @@ public class Driver {
     @OneToMany(mappedBy = "driver")
     private Set<Vehicle> vehicles;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id")
     private Branch branch;
 
     @OneToMany(mappedBy = "driver")
     private Set<Rating> ratings;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 }

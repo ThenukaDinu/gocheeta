@@ -22,10 +22,14 @@ public class Rating {
     private int ratingCount;
 
     @ManyToOne
-    @JoinColumn(name = "driverId")
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @OneToOne
     @JoinColumn(name = "ratingGivenUserId")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
 }

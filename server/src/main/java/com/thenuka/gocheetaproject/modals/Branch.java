@@ -22,9 +22,9 @@ public class Branch {
     private String contactNo;
     private String address;
 
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private Set<Vehicle> vehicles;
 
-    @OneToMany(mappedBy = "branch")
+    @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private Set<Driver> drivers;
 }

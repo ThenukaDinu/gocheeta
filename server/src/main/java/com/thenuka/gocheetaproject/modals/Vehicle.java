@@ -23,7 +23,7 @@ public class Vehicle {
     private String brand;
     private String numberPlateNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "branch_id")
     private Branch branch;
 

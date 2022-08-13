@@ -42,6 +42,12 @@ public class UserService implements IUserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthority(user));
     }
 
+    @Override
+    public User findByUsername (String username) {
+        User user = userRepository.findByUsername(username);
+        return user;
+    }
+
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
@@ -67,26 +73,51 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public User save(UserDto user) {
-
         User nUser = user.getUserFromDto();
         nUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        setInitialRoles(nUser);
+        return userRepository.save(nUser);
+    }
 
+    @Override
+    public User save (User user) {
+        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+        setInitialRoles(user);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User setInitialRoles (User user) {
         Role role = roleService.findByName("USER");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
 
-        if(nUser.getEmail().split("@")[1].equals("admin.edu")){
+        if(user.getEmail().split("@")[1].equals("admin.edu")){
             role = roleService.findByName("ADMIN");
             roleSet.add(role);
         }
-
-        nUser.setRoles(roleSet);
-        return userRepository.save(nUser);
+        user.setRoles(roleSet);
+        return user;
     }
 
     @Override
     public User findOne(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return userRepository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public User findById(int id) {
+        return userRepository.findById(id).get();
     }
 
     @Override

@@ -3,13 +3,8 @@ package com.thenuka.gocheetaproject.services;
 import com.thenuka.gocheetaproject.dto.BookingDTO;
 import com.thenuka.gocheetaproject.dto.VehicleDTO;
 import com.thenuka.gocheetaproject.enums.publicEnum;
-import com.thenuka.gocheetaproject.interfaces.IBookingService;
-import com.thenuka.gocheetaproject.interfaces.ICategoryService;
-import com.thenuka.gocheetaproject.interfaces.IVehicleService;
+import com.thenuka.gocheetaproject.interfaces.*;
 import com.thenuka.gocheetaproject.modals.*;
-import com.thenuka.gocheetaproject.repositories.IBranchRepository;
-import com.thenuka.gocheetaproject.repositories.ICategoryRepository;
-import com.thenuka.gocheetaproject.repositories.IDriverRepository;
 import com.thenuka.gocheetaproject.repositories.IVehicleRepository;
 import com.thenuka.gocheetaproject.requests.VehicleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,17 +22,27 @@ public class VehicleService implements IVehicleService {
     @Autowired
     private IVehicleRepository vehicleRepository;
     @Autowired
-    private ICategoryRepository categoryRepository;
+    private ICategoryService categoryService;
     @Autowired
     private IBookingService bookingService;
     @Autowired
-    private IBranchRepository branchRepository;
+    private IBranchService branchService;
     @Autowired
-    private IDriverRepository driverRepository;
+    private IDriverService driverService;
 
     @Override
     public VehicleDTO findOne(int id) {
         return convertEntityToDto(vehicleRepository.findById(id).get());
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return vehicleRepository.existsById(id);
+    }
+
+    @Override
+    public Vehicle findById(int id) {
+        return vehicleRepository.findById(id).get();
     }
 
     @Override
@@ -94,16 +100,16 @@ public class VehicleService implements IVehicleService {
         vehicle.setVehicleType(publicEnum.VehicleType.valueOf(vehicleRequest.getVehicleType()));
         vehicle.setBrand(vehicleRequest.getBrand());
         vehicle.setNumberPlateNo(vehicleRequest.getNumberPlateNo());
-        if (categoryRepository.existsById(vehicleRequest.getCategoryId())) {
-            Category category = categoryRepository.findById(vehicleRequest.getCategoryId()).get();
+        if (categoryService.existsById(vehicleRequest.getCategoryId())) {
+            Category category = categoryService.findById(vehicleRequest.getCategoryId());
             vehicle.setCategory(category);
         }
-        if (branchRepository.existsById(vehicleRequest.getBranchId())) {
-            Branch branch = branchRepository.findById(vehicleRequest.getBranchId()).get();
+        if (branchService.existsById(vehicleRequest.getBranchId())) {
+            Branch branch = branchService.findById(vehicleRequest.getBranchId());
             vehicle.setBranch(branch);
         }
-        if (driverRepository.existsById(vehicleRequest.getDriverId())) {
-            Driver driver = driverRepository.findById(vehicleRequest.getDriverId()).get();
+        if (driverService.existsById(vehicleRequest.getDriverId())) {
+            Driver driver = driverService.findById(vehicleRequest.getDriverId());
             vehicle.setDriver(driver);
         }
         return vehicle;

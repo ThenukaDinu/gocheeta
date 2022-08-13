@@ -11,4 +11,5 @@ public class RatingRequest {
 
     private int driverId;
     private int ratingGivenUserId;
+    private int bookingId;
 }

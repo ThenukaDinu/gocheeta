@@ -26,4 +26,5 @@ public class BookingDTO {
     private int driverId;
     private int userId;
     private int vehicleId;
+    private int ratingId;
 }

@@ -45,4 +45,7 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
+
+    @OneToOne(mappedBy = "booking")
+    private Rating rating;
 }

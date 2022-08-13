@@ -8,6 +8,11 @@ import java.util.List;
 
 public interface ICategoryService {
     CategoryDTO findOne(int id);
+
+    boolean existsById(int id);
+
+    Category findById(int id);
+
     CategoryDTO save(Category category);
     CategoryDTO update(int id, CategoryRequest category);
     void delete(int id);

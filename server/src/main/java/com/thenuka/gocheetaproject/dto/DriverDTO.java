@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class DriverDTO {
     private int userId;
     private String username;
-    private String password;
     private String email;
     private String mobile;
     private String firstName;

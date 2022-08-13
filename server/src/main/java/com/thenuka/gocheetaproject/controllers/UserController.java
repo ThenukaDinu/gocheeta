@@ -2,7 +2,6 @@ package com.thenuka.gocheetaproject.controllers;
 
 import com.thenuka.gocheetaproject.dto.UserRoleDTO;
 import com.thenuka.gocheetaproject.interfaces.IUserService;
-import com.thenuka.gocheetaproject.modals.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

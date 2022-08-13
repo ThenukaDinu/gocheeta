@@ -31,6 +31,17 @@ public class BookingService implements IBookingService {
         if (book.getVehicle() != null) bookingDTO.setVehicleId(book.getVehicle().getId());
         if (book.getDriver() != null)  bookingDTO.setDriverId(book.getDriver().getId());
         if (book.getUser() != null)  bookingDTO.setUserId(book.getUser().getId());
+        if (book.getRating() != null) bookingDTO.setRatingId(book.getRating().getId());
         return bookingDTO;
+    }
+
+    @Override
+    public boolean existsById(int id) {
+        return bookingRepository.existsById(id);
+    }
+
+    @Override
+    public Booking findById (int id) {
+        return bookingRepository.findById(id).get();
     }
 }

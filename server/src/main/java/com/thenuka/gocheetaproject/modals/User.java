@@ -39,13 +39,14 @@ public class User {
     )
     Set<Role> roles;
 
-    @OneToMany
-    @JoinColumn(name = "user")
+    @OneToMany(mappedBy = "user")
     private Set<Booking> bookings;
 
-    @OneToMany
-    @JoinColumn(name = "user")
+    @OneToMany(mappedBy = "user")
     private Set<Rating> ratings;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Driver driver;
 
     @PostLoad
     private void onLoad() {
