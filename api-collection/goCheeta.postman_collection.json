@@ -1085,6 +1085,26 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "checkEmal",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/send-mail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"send-mail"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -1092,7 +1112,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjA0NTQxMDQsImV4cCI6MTY2MDQ3MjEwNH0.e8suJQCTKzCQJJaGvkcXw0fiOqfrE5PLh_FaTlxa1NI",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjA0ODU2MTMsImV4cCI6MTY2MDUwMzYxM30.qQCXtG2CBEQs1tx2dS13GwfQz8HZ_RnKLnI_syeCdtY",
 				"type": "string"
 			}
 		]
