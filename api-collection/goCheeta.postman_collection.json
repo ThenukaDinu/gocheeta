@@ -240,7 +240,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"model\": \"Bajaj RE SP\",\r\n    \"vehicleType\": \"ThreeWheel\",\r\n    \"brand\": \"Bajaj Auto\",\r\n    \"numberPlateNo\": \"WAA4362\",\r\n    \"branchId\": 0,\r\n    \"driverId\": 0,\r\n    \"categoryId\": 0\r\n}",
+							"raw": "{\r\n    \"model\": \"Bajaj RE SP\",\r\n    \"vehicleType\": \"ThreeWheel\",\r\n    \"brand\": \"Bajaj Auto\",\r\n    \"numberPlateNo\": \"WAA4362\",\r\n    \"branchId\": 8,\r\n    \"driverId\": 5,\r\n    \"categoryId\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -898,6 +898,127 @@
 			]
 		},
 		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOneByID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookings/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookings",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookings/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookings",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tripScheduledTime\": \"2022-08-16T18:00:00\",\r\n    \"tripStartTime\": \"\",\r\n    \"tripFinishedTime\": \"\",\r\n    \"tripCanceledTime\": \"\",\r\n    \"pickUpLocation\": \"Kotte\",\r\n    \"dropOffLocation\": \"Colombo 07\",\r\n    \"status\": \"Pending\",\r\n    \"driverId\": 12,\r\n    \"userId\": 2,\r\n    \"vehicleId\": 12\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tripPlacedTime\": \"2022-08-14T11:25:00\",\r\n    \"tripScheduledTime\": \"2022-08-16T18:00:00\",\r\n    \"tripStartTime\": \"2022-08-16T18:10:00\",\r\n    \"tripFinishedTime\": \"2022-08-16T19:30:00\",\r\n    \"tripCanceledTime\": \"\",\r\n    \"pickUpLocation\": \"Kotte\",\r\n    \"dropOffLocation\": \"Colombo 07\",\r\n    \"status\": \"Pending\",\r\n    \"driverId\": 12,\r\n    \"userId\": 2,\r\n    \"vehicleId\": 12\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/bookings/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookings",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "CheckAPIRunning[no-login]",
 			"request": {
 				"method": "GET",
@@ -971,7 +1092,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjA0MTU0MjYsImV4cCI6MTY2MDQzMzQyNn0.3GvyJjY1KLrD_C1KkE8hnIFTtkBN8CJCtMbLD3xzxps",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjA0NTQxMDQsImV4cCI6MTY2MDQ3MjEwNH0.e8suJQCTKzCQJJaGvkcXw0fiOqfrE5PLh_FaTlxa1NI",
 				"type": "string"
 			}
 		]

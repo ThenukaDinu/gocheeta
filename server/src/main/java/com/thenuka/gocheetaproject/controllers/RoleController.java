@@ -1,12 +1,9 @@
 package com.thenuka.gocheetaproject.controllers;
 
 import com.thenuka.gocheetaproject.dto.RoleDTO;
-import com.thenuka.gocheetaproject.dto.VehicleDTO;
 import com.thenuka.gocheetaproject.interfaces.IRoleService;
 import com.thenuka.gocheetaproject.modals.Role;
-import com.thenuka.gocheetaproject.modals.Vehicle;
 import com.thenuka.gocheetaproject.requests.RoleRequest;
-import com.thenuka.gocheetaproject.requests.VehicleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;

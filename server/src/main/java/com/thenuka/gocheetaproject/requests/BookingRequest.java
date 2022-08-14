@@ -1,15 +1,16 @@
-package com.thenuka.gocheetaproject.dto;
+package com.thenuka.gocheetaproject.requests;
 
+import com.thenuka.gocheetaproject.dto.RatingsDTO;
 import com.thenuka.gocheetaproject.enums.publicEnum;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Getter
 @Setter
-public class BookingDTO {
-    private int id;
-    private double price;
+public class BookingRequest {
     private LocalDateTime tripPlacedTime;
     private LocalDateTime tripScheduledTime;
     private LocalDateTime tripStartTime;
@@ -17,9 +18,9 @@ public class BookingDTO {
     private LocalDateTime tripCanceledTime;
     private String pickUpLocation;
     private String dropOffLocation;
-    private publicEnum.BookingStatus status;
+    private String status;
+
     private int driverId;
     private int userId;
     private int vehicleId;
-    private int ratingId;
 }
