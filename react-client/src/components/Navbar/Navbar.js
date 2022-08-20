@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import './Navbar.scss';
 import logo from './../../assets/images/fake-logo.svg';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
@@ -13,7 +14,7 @@ export default function Navbar() {
           </a>
         </li>
         <li>
-          <a href='default.asp'>Home</a>
+          <Link to='/'>Home</Link>
         </li>
         <li>
           <a href='news.asp'>News</a>
@@ -25,12 +26,16 @@ export default function Navbar() {
           <a href='about.asp'>About</a>
         </li>
         <li>
-          <Button variant='contained' color='custom'>
-            Sign In
-          </Button>
-          <Button variant='contained' color='custom'>
-            Sign Up
-          </Button>
+          <Link to='/signIn'>
+            <Button variant='contained' color='custom'>
+              Sign In
+            </Button>
+          </Link>
+          <Link to='/signUp'>
+            <Button variant='contained' color='custom'>
+              Sign Up
+            </Button>
+          </Link>
           {/* <Button variant='outlined'>Logout</Button> */}
         </li>
       </ul>

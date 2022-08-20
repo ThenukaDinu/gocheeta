@@ -39,7 +39,7 @@ public class AuthenticationController {
             "<br/><br/>\n" +
             "\n" +
             "<p style=\"margin: 0 60px 0 60px;text-align:center;font-size:17px;line-height:2;\">\n" +
-            "  <b>We</b> are here to provide you best vehicle ride experiance in Sri Lanka. When you ready just go into out site and make your first journey. We have several types of vehicles and great group of drivers to make your ride <b>safe</b> and <b>comfotable</b> and <b>quick</b>.\n" +
+            "  <b>We</b> are here to provide you best vehicle ride experiance in Sri Lanka. When you ready just go into out side and make your first journey. We have several types of vehicles and great group of drivers to make your ride <b>safe</b> and <b>comfortable</b> and <b>quick</b>.\n" +
             "</p>\n" +
             "\n" +
             "<br/><br/>\n" +

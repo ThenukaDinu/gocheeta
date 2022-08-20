@@ -1,0 +1,27 @@
+.SignUp {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(auto, 2fr));
+
+  .left {
+    padding: 5rem 10rem 2rem 8rem;
+    .title {
+      margin-bottom: 2rem;
+    }
+    .buttons {
+      margin-top: 1.2rem;
+    }
+  }
+  .right {
+    padding: 3rem 2rem 2rem 8rem;
+  }
+  .image_right {
+    border-radius: 0.5rem;
+    height: calc(100vh - 12rem);
+    -webkit-box-shadow: 10px 11px 5px -3px rgba(0, 0, 0, 0.51);
+    -moz-box-shadow: 10px 11px 5px -3px rgba(0, 0, 0, 0.51);
+    box-shadow: 10px 11px 5px -3px rgba(0, 0, 0, 0.51);
+  }
+  .inputs > * {
+    margin-bottom: 1.2rem;
+  }
+}
