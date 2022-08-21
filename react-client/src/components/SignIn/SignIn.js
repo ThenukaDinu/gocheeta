@@ -1,9 +1,10 @@
 import React from 'react';
 import './SignIn.scss';
-import image from './../../assets/images/toyota_sign_up.jpg';
+import image from './../../assets/images/benz_sign_in.jpg';
 import { TextField, Button } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
   const [emailAddress, setEmailAddress] = useState({
@@ -47,7 +48,29 @@ export default function SignIn() {
       password: password.value,
     });
     console.log(response);
+    saveJwtCookie(response);
   };
+  const saveJwtCookie = (response) => {
+    if (response.status === 200) {
+      localStorage.setItem('token', response.data.jwtToken);
+    }
+  };
+  const navigate = useNavigate();
+  useEffect(() => {
+    const checkAlreadyLoggedIn = async () => {
+      if (!localStorage.getItem('token')) {
+        return;
+      }
+      if (localStorage.getItem('token')) {
+        const response = await axios.get('/secured');
+        if (response.status === 200) {
+          navigate('/home');
+        }
+      }
+    };
+    checkAlreadyLoggedIn();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className='SignIn'>
@@ -64,6 +87,7 @@ export default function SignIn() {
             required
             error={emailAddress.error}
             helperText={emailAddress.helperText}
+            autoFocus={true}
           />
           <TextField
             id='password'
