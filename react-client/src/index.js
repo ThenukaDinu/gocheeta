@@ -5,6 +5,10 @@ import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
+import store from './store/store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 axios.interceptors.request.use(
@@ -18,7 +22,6 @@ axios.interceptors.request.use(
       config.headers.common.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JsssST0xFX1VTRVIiLCJpYXQiOjE2NjExMDMwODUsImV4cCI6MTY2MTEyMTA4NX0.C8teZn6x0oGZfmeadnSmMmgf0iPeIdiV8Q6bCiyY-vY`;
     } else {
       config.headers.common.Authorization = `Bearer ${token}`;
-      console.log(config.headers);
     }
     return config;
   },
@@ -28,10 +31,15 @@ axios.interceptors.request.use(
   }
 );
 const root = ReactDOM.createRoot(document.getElementById('root'));
+let persistor = persistStore(store);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );

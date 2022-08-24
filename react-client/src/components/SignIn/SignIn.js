@@ -5,8 +5,13 @@ import { TextField, Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserDetails } from '../../store/userSlice';
 
 export default function SignIn() {
+  const userDetails = useSelector((state) => state.user.userDetails);
+  const dispatch = useDispatch();
+
   const [emailAddress, setEmailAddress] = useState({
     error: false,
     value: null,
@@ -49,6 +54,8 @@ export default function SignIn() {
     });
     console.log(response);
     saveJwtCookie(response);
+    dispatch(setUserDetails(response.data.user));
+    navigate('/');
   };
   const saveJwtCookie = (response) => {
     if (response.status === 200) {
@@ -58,13 +65,14 @@ export default function SignIn() {
   const navigate = useNavigate();
   useEffect(() => {
     const checkAlreadyLoggedIn = async () => {
+      console.log(userDetails);
       if (!localStorage.getItem('token')) {
         return;
       }
       if (localStorage.getItem('token')) {
         const response = await axios.get('/secured');
         if (response.status === 200) {
-          navigate('/home');
+          navigate('/');
         }
       }
     };

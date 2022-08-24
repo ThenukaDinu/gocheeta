@@ -1,6 +1,7 @@
 package com.thenuka.gocheetaproject.modals;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -30,6 +31,15 @@ public class User {
     private String username;
     private String password;
     private String address;
+    @Nullable
+    private String avatar;
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (avatar == null || id == 0) return null;
+
+        return "/static/user-photos/" + id + "/" + avatar;
+    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -17,11 +17,14 @@
   .navbar-parent li {
     display: inline-flex;
     align-items: center;
-    margin: 0 2.5rem;
+    margin: 0 1.7rem;
     font-size: 1.2rem;
   }
   .navbar-parent li a {
     text-decoration: none;
+  }
+  .navbar-parent li:nth-child(2) {
+    margin-left: 5rem;
   }
   .navbar-parent li:last-child {
     margin-left: auto;
@@ -73,4 +76,8 @@
       width: calc(100wv - 1.6rem);
     }
   }
+}
+
+.Navbar.admin {
+  box-shadow: var(--box-shadow-admin);
 }

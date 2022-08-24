@@ -34,4 +34,5 @@ public interface IUserService {
     User setInitialRoles (User user);
 
     User convertRequestToEntity(UserDto userRequest, User user);
+    UserRoleDTO saveAvatar(int id, String url);
 }

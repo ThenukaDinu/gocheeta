@@ -4,12 +4,23 @@ import com.thenuka.gocheetaproject.dto.UserDto;
 import com.thenuka.gocheetaproject.dto.UserRoleDTO;
 import com.thenuka.gocheetaproject.interfaces.IUserService;
 import com.thenuka.gocheetaproject.requests.UserRoleRequest;
+import com.thenuka.gocheetaproject.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.commons.io.IOUtils;
 
 @RequestMapping("/user")
 @RestController
@@ -89,5 +100,38 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PreAuthorize("hasAnyRole('USER')")
+    @RequestMapping(value = "update-avatar/{userId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateAvatar(@RequestParam("image") MultipartFile multipartFile, @PathVariable(value = "userId") int id) {
+        try {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            UserRoleDTO userReturned = userService.saveAvatar(id, fileName);
+            String uploadDir = "static/user-photos/" + userReturned.getUserId();
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            return new ResponseEntity<>(userReturned, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(
+            value = "/get-image",
+            produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody ResponseEntity<?> getImageWithMediaType(@RequestParam String url) {
+        try {
+            String path = new FileSystemResource("").getFile().getAbsolutePath();
+            Path fullPath = Paths.get(path, url);
+            InputStream in = getClass()
+                    .getResourceAsStream(fullPath.toString());
+            return new ResponseEntity<>(IOUtils.toByteArray(in), HttpStatus.OK);
+        }
+         catch (Exception e) {
+             e.printStackTrace();
+         }
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

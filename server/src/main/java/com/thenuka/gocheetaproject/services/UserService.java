@@ -160,6 +160,7 @@ public class UserService implements IUserService, UserDetailsService {
         userRoleDTO.setFullName(user.getFullName());
         userRoleDTO.setMobile(user.getMobile());
         userRoleDTO.setAddress(user.getAddress());
+        userRoleDTO.setAvatarUrl(user.getPhotosImagePath());
         ArrayList<RoleDTO> roleDTOS = new ArrayList<RoleDTO>();
         for (Role role : user.getRoles()) {
             RoleDTO roleDTO = new RoleDTO();
@@ -183,6 +184,14 @@ public class UserService implements IUserService, UserDetailsService {
         user.setDateOfBirth(userRequest.getDateOfBirth());
         user.setAddress(userRequest.getAddress());
         return user;
+    }
+
+    @Override
+    public UserRoleDTO saveAvatar(int id, String name) {
+        User user = userRepository.findById(id).get();
+        user.setAvatar(name);
+        User savedUser = userRepository.save(user);
+        return convertEntityToDto(savedUser);
     }
 
 }

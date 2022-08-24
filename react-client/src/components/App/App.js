@@ -5,22 +5,21 @@ import Home from '../Home/Home';
 import SignIn from '../SignIn/SignIn';
 import { Route, Routes } from 'react-router-dom';
 import SignUp from '../SignUp/SignUp';
-
-const theme = createTheme({
-  status: {
-    danger: '#e53e3e',
-  },
-  palette: {
-    custom: {
-      main: '#ff7800',
-      light: '#ffa726',
-      dark: '#0087FF',
-      contrastText: '#fff',
-    },
-  },
-});
+import Driver from '../Driver/Driver';
+import { useMediaQuery } from '@mui/material';
+import React from 'react';
 
 function App() {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode],
+  );
   return (
     <div className='App'>
       <ThemeProvider theme={theme}>
@@ -28,8 +27,9 @@ function App() {
         <div className='body-container'>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='signIn' element={<SignIn />} />
-            <Route path='signUp' element={<SignUp />} />
+            <Route path='/signIn' element={<SignIn />} />
+            <Route path='/signUp' element={<SignUp />} />
+            <Route path='/drivers' element={<Driver />} />
           </Routes>
         </div>
       </ThemeProvider>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import './SignUp.scss';
@@ -8,49 +8,86 @@ import { TextField, Button } from '@mui/material';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp({ children }) {
-  const [firstName, setFirstName] = useState('');
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState({ error: false });
   const onFirstNameChange = (event) => {
-    setFirstName(event.target.value);
+    setFirstName({ ...firstName, value: event.target.value });
   };
-  const [lastName, setLastName] = useState('');
+  const [lastName, setLastName] = useState({ error: false });
   const onLastNameChange = (event) => {
-    setLastName(event.target.value);
+    setLastName({ ...lastName, value: event.target.value });
   };
-  const [emailAddress, setEmailAddress] = useState('');
+  const [emailAddress, setEmailAddress] = useState({ error: false });
   const onEmailAddressChange = (event) => {
-    setEmailAddress(event.target.value);
+    setEmailAddress({ ...emailAddress, value: event.target.value });
   };
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState({ error: false });
   const onPasswordChange = (event) => {
-    setPassword(event.target.value);
+    setPassword({ ...password, value: event.target.value });
   };
-  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState({});
   const onDateOfBirthChange = (newValue) => {
     console.log(format(newValue, 'yyyy-MM-dd'));
-    setDateOfBirth(newValue);
+    setDateOfBirth({ ...dateOfBirth, value: newValue });
   };
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState({});
   const onAddressChange = (event) => {
-    setAddress(event.target.value);
+    setAddress({ ...address, value: event.target.value });
   };
-  const [mobile, setMobile] = useState('');
+  const [mobile, setMobile] = useState({});
   const onMobileChange = (event) => {
-    setMobile(event.target.value);
+    setMobile({ ...mobile, value: event.target.value });
   };
   const registerUser = async () => {
+    setFirstName({ ...firstName, error: false });
+    setLastName({ ...lastName, error: false });
+    setEmailAddress({ ...emailAddress, error: false });
+    setPassword({ ...password, error: false });
+    if (!firstName.value) setFirstName({ ...firstName, error: true });
+    if (!lastName.value) setLastName({ ...lastName, error: true });
+    if (!emailAddress.value) setEmailAddress({ ...emailAddress, error: true });
+    if (!password.value) setPassword({ ...password, error: true });
+    if (
+      !firstName.value ||
+      !lastName.value ||
+      !emailAddress.value ||
+      !password.value
+    )
+      return;
     const response = await axios.post('/users/register', {
-      username: emailAddress,
-      password: password,
-      mobile: mobile,
-      firstName: firstName,
-      lastName: lastName,
-      dateOfBirth: dateOfBirth ? format(dateOfBirth, 'yyyy-MM-dd') : null,
-      address: address,
+      username: emailAddress.value,
+      password: password.value,
+      mobile: mobile.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      dateOfBirth:
+        dateOfBirth && dateOfBirth.value
+          ? format(dateOfBirth.value, 'yyyy-MM-dd')
+          : null,
+      address: address.value,
     });
-    console.log(response);
+    if (response.status === 201) {
+      navigate('/signIn');
+    }
   };
+  useEffect(() => {
+    const checkAlreadyLoggedIn = async () => {
+      if (!localStorage.getItem('token')) {
+        return;
+      }
+      if (localStorage.getItem('token')) {
+        const response = await axios.get('/secured');
+        if (response.status === 200) {
+          navigate('/');
+        }
+      }
+    };
+    checkAlreadyLoggedIn();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className='SignUp'>
@@ -67,6 +104,7 @@ export default function SignUp({ children }) {
               onChange={onFirstNameChange}
               autoFocus={true}
               required
+              error={firstName.error}
             />
             <TextField
               id='last_name'
@@ -76,6 +114,7 @@ export default function SignUp({ children }) {
               fullWidth={true}
               onChange={onLastNameChange}
               required
+              error={lastName.error}
             />
             <TextField
               id='email_address'
@@ -85,6 +124,7 @@ export default function SignUp({ children }) {
               fullWidth={true}
               onChange={onEmailAddressChange}
               required
+              error={emailAddress.error}
             />
             <TextField
               id='password'
@@ -93,10 +133,8 @@ export default function SignUp({ children }) {
               label='Password'
               fullWidth={true}
               onChange={onPasswordChange}
-              InputProps={{
-                autocomplete: 'new-password',
-              }}
               required
+              error={password.error}
             />
             <TextField
               id='mobile'
@@ -119,7 +157,7 @@ export default function SignUp({ children }) {
             <DesktopDatePicker
               label='Date Of Birth'
               onChange={onDateOfBirthChange}
-              value={dateOfBirth}
+              value={dateOfBirth.value}
               inputFormat='yyyy/MM/dd'
               renderInput={(params) => (
                 <TextField

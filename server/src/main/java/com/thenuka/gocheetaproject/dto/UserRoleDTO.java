@@ -20,5 +20,6 @@ public class UserRoleDTO {
     private String mobile;
     private String email;
     private String address;
+    private String avatarUrl;
     private ArrayList<RoleDTO> roles;
 }
