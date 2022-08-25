@@ -1,15 +1,20 @@
 import React from 'react';
 import './SignIn.scss';
 import image from './../../assets/images/benz_sign_in.jpg';
-import { TextField, Button } from '@mui/material';
+import { TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserDetails } from '../../store/userSlice';
+import { toast } from 'react-toastify';
 
 export default function SignIn() {
-  const userDetails = useSelector((state) => state.user.userDetails);
+  const [loading, setLoading] = useState(false);
+  const invalidCredentials = () =>
+    toast.error('Invalid credentials!, Please try again.');
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [emailAddress, setEmailAddress] = useState({
@@ -28,6 +33,7 @@ export default function SignIn() {
   };
 
   const loginUser = async () => {
+    setLoading(true);
     let notValid = false;
     setEmailAddress({ ...emailAddress, error: false, helperText: '' });
     setPassword({ ...password, error: false, helperText: '' });
@@ -48,14 +54,27 @@ export default function SignIn() {
       });
     }
     if (notValid) return;
-    const response = await axios.post('/users/login', {
-      username: emailAddress.value,
-      password: password.value,
-    });
+    let response = null;
+    try {
+      response = await axios.post('/users/login', {
+        username: emailAddress.value,
+        password: password.value,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      if (error.response.status === 400) {
+        invalidCredentials();
+      }
+      console.error(error.response);
+    }
+    if (!response) return;
     console.log(response);
-    saveJwtCookie(response);
-    dispatch(setUserDetails(response.data.user));
-    navigate('/');
+    if (response.status === 200) {
+      saveJwtCookie(response);
+      dispatch(setUserDetails(response.data.user));
+      navigate('/');
+    }
   };
   const saveJwtCookie = (response) => {
     if (response.status === 200) {
@@ -65,7 +84,6 @@ export default function SignIn() {
   const navigate = useNavigate();
   useEffect(() => {
     const checkAlreadyLoggedIn = async () => {
-      console.log(userDetails);
       if (!localStorage.getItem('token')) {
         return;
       }
@@ -88,7 +106,7 @@ export default function SignIn() {
           <TextField
             id='email_address'
             name='email_address'
-            type='text'
+            type='email'
             label='Email Address'
             fullWidth={true}
             onChange={onEmailAddressChange}
@@ -110,15 +128,16 @@ export default function SignIn() {
           />
         </div>
         <div className='buttons'>
-          <Button
+          <LoadingButton
             variant='contained'
             color='primary'
             size='large'
             fullWidth={true}
             onClick={loginUser}
+            loading={loading}
           >
             Sign In
-          </Button>
+          </LoadingButton>
         </div>
       </div>
       <div className='side right'>

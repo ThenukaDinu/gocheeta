@@ -14,14 +14,17 @@ export default function Navbar() {
   const logoutUser = () => {
     dispatch(removeUserDetails());
   };
-  const isAdmin = () => {
-    return (
-      userDetails !== null &&
-      userDetails.roles.some((role) => role.roleName === 'ADMIN')
-    );
-  };
+
   return (
-    <div className={'Navbar ' + (isAdmin ? 'admin' : '')}>
+    <div
+      className={
+        'Navbar ' +
+        (userDetails !== null &&
+        userDetails.roles.some((role) => role.roleName === 'ADMIN')
+          ? 'admin'
+          : '')
+      }
+    >
       <ul className='navbar-parent'>
         <li>
           <Link to='/'>
@@ -32,7 +35,8 @@ export default function Navbar() {
         <li>
           <Link to='/'>Home</Link>
         </li>
-        {isAdmin === true ? (
+        {userDetails !== null &&
+        userDetails.roles.some((role) => role.roleName === 'ADMIN') ? (
           <>
             <li>
               <Link to='/drivers'>Drivers</Link>
@@ -56,7 +60,10 @@ export default function Navbar() {
         ) : (
           <></>
         )}
-        {!isAdmin || userDetails === null ? (
+        {!(
+          userDetails !== null &&
+          userDetails.roles.some((role) => role.roleName === 'ADMIN')
+        ) || userDetails === null ? (
           <>
             <li>
               <a href='contact.asp'>Contact</a>
