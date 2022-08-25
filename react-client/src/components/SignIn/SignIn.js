@@ -6,7 +6,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserDetails } from '../../store/userSlice';
 import { toast } from 'react-toastify';
 
@@ -14,7 +14,6 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const invalidCredentials = () =>
     toast.error('Invalid credentials!, Please try again.');
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [emailAddress, setEmailAddress] = useState({
@@ -53,7 +52,10 @@ export default function SignIn() {
         helperText: 'Password is required',
       });
     }
-    if (notValid) return;
+    if (notValid) {
+      setLoading(false);
+      return;
+    }
     let response = null;
     try {
       response = await axios.post('/users/login', {

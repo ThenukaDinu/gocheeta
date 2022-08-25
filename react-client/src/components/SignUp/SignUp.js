@@ -4,72 +4,129 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import './SignUp.scss';
 import image from './../../assets/images/toyota_sign_up.jpg';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { TextField, Button } from '@mui/material';
+import { TextField } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import validator from 'validator';
+import { toast } from 'react-toastify';
 
 export default function SignUp({ children }) {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState({ error: false });
+  const invalidDetails = () =>
+    toast.error('Invalid details provided!, Please validate and try again.');
+  const otherError = () =>
+    toast.error('Something went wrong, Please contact support service.');
+  const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState({ error: false, value: '' });
+  const [lastName, setLastName] = useState({ error: false, value: '' });
+  const [emailAddress, setEmailAddress] = useState({ error: false, value: '' });
+  const [password, setPassword] = useState({ error: false, value: '' });
+  const [dateOfBirth, setDateOfBirth] = useState({});
+  const [address, setAddress] = useState({ value: '' });
+  const [mobile, setMobile] = useState({ value: '' });
   const onFirstNameChange = (event) => {
     setFirstName({ ...firstName, value: event.target.value });
   };
-  const [lastName, setLastName] = useState({ error: false });
   const onLastNameChange = (event) => {
     setLastName({ ...lastName, value: event.target.value });
   };
-  const [emailAddress, setEmailAddress] = useState({ error: false });
   const onEmailAddressChange = (event) => {
     setEmailAddress({ ...emailAddress, value: event.target.value });
   };
-  const [password, setPassword] = useState({ error: false });
   const onPasswordChange = (event) => {
     setPassword({ ...password, value: event.target.value });
   };
-  const [dateOfBirth, setDateOfBirth] = useState({});
   const onDateOfBirthChange = (newValue) => {
-    console.log(format(newValue, 'yyyy-MM-dd'));
     setDateOfBirth({ ...dateOfBirth, value: newValue });
   };
-  const [address, setAddress] = useState({});
   const onAddressChange = (event) => {
     setAddress({ ...address, value: event.target.value });
   };
-  const [mobile, setMobile] = useState({});
   const onMobileChange = (event) => {
     setMobile({ ...mobile, value: event.target.value });
   };
   const registerUser = async () => {
-    setFirstName({ ...firstName, error: false });
-    setLastName({ ...lastName, error: false });
-    setEmailAddress({ ...emailAddress, error: false });
-    setPassword({ ...password, error: false });
-    if (!firstName.value) setFirstName({ ...firstName, error: true });
-    if (!lastName.value) setLastName({ ...lastName, error: true });
-    if (!emailAddress.value) setEmailAddress({ ...emailAddress, error: true });
-    if (!password.value) setPassword({ ...password, error: true });
-    if (
-      !firstName.value ||
-      !lastName.value ||
-      !emailAddress.value ||
-      !password.value
-    )
+    setLoading(true);
+    setFirstName({ ...firstName, error: false, helperText: '' });
+    setLastName({ ...lastName, error: false, helperText: '' });
+    setEmailAddress({ ...emailAddress, error: false, helperText: '' });
+    setPassword({ ...password, error: false, helperText: '' });
+    let notValid = false;
+    if (validator.isEmpty(firstName.value)) {
+      setFirstName({
+        ...firstName,
+        error: true,
+        helperText: 'First name is required',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(lastName.value)) {
+      setLastName({
+        ...lastName,
+        error: true,
+        helperText: 'Last name is required',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(emailAddress.value)) {
+      setEmailAddress({
+        ...emailAddress,
+        error: true,
+        helperText: 'Email address is required',
+      });
+      notValid = true;
+    }
+    if (emailAddress.value && !validator.isEmail(emailAddress.value)) {
+      setEmailAddress({
+        ...emailAddress,
+        error: true,
+        helperText: 'Please enter a valid email address',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(password.value)) {
+      setPassword({
+        ...password,
+        error: true,
+        helperText: 'Password is required',
+      });
+      notValid = true;
+    }
+
+    if (notValid) {
+      setLoading(false);
       return;
-    const response = await axios.post('/users/register', {
-      username: emailAddress.value,
-      password: password.value,
-      mobile: mobile.value,
-      firstName: firstName.value,
-      lastName: lastName.value,
-      dateOfBirth:
-        dateOfBirth && dateOfBirth.value
-          ? format(dateOfBirth.value, 'yyyy-MM-dd')
-          : null,
-      address: address.value,
-    });
-    if (response.status === 201) {
+    }
+
+    let response = null;
+    try {
+      response = await axios.post('/users/register', {
+        username: emailAddress.value,
+        password: password.value,
+        mobile: mobile.value,
+        firstName: firstName.value,
+        lastName: lastName.value,
+        dateOfBirth:
+          dateOfBirth && dateOfBirth.value
+            ? format(dateOfBirth.value, 'yyyy-MM-dd')
+            : null,
+        address: address.value,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      if (error.response.status === 400) {
+        invalidDetails();
+        return;
+      }
+      otherError();
+    }
+
+    if (response && response.status === 201) {
       navigate('/signIn');
     }
   };
@@ -105,6 +162,7 @@ export default function SignUp({ children }) {
               autoFocus={true}
               required
               error={firstName.error}
+              helperText={firstName.helperText}
             />
             <TextField
               id='last_name'
@@ -115,16 +173,18 @@ export default function SignUp({ children }) {
               onChange={onLastNameChange}
               required
               error={lastName.error}
+              helperText={lastName.helperText}
             />
             <TextField
               id='email_address'
               name='email_address'
-              type='text'
+              type='email'
               label='Email Address'
               fullWidth={true}
               onChange={onEmailAddressChange}
               required
               error={emailAddress.error}
+              helperText={emailAddress.helperText}
             />
             <TextField
               id='password'
@@ -135,11 +195,12 @@ export default function SignUp({ children }) {
               onChange={onPasswordChange}
               required
               error={password.error}
+              helperText={password.helperText}
             />
             <TextField
               id='mobile'
               name='mobile'
-              type='text'
+              type='number'
               label='Mobile No'
               fullWidth={true}
               onChange={onMobileChange}
@@ -171,15 +232,16 @@ export default function SignUp({ children }) {
           </div>
         </LocalizationProvider>
         <div className='buttons'>
-          <Button
+          <LoadingButton
             variant='contained'
             color='primary'
             size='large'
+            loading={loading}
             fullWidth={true}
             onClick={registerUser}
           >
             Sign Up
-          </Button>
+          </LoadingButton>
         </div>
       </div>
       <div className='side right'>
