@@ -45,6 +45,11 @@ export default function Driver() {
     setLastName({ ...lastName, error: false, helperText: '' });
     setEmailAddress({ ...emailAddress, error: false, helperText: '' });
     setPassword({ ...password, error: false, helperText: '' });
+    setDateOfBirth({
+      ...dateOfBirth,
+      error: false,
+      helperText: '',
+    });
     let notValid = false;
     if (validator.isEmpty(firstName.value)) {
       setFirstName({
@@ -70,7 +75,10 @@ export default function Driver() {
       });
       notValid = true;
     }
-    if (emailAddress.value && !validator.isEmail(emailAddress.value)) {
+    if (
+      !validator.isEmpty(emailAddress.value) &&
+      !validator.isEmail(emailAddress.value)
+    ) {
       setEmailAddress({
         ...emailAddress,
         error: true,
@@ -85,6 +93,13 @@ export default function Driver() {
         helperText: 'Password is required',
       });
       notValid = true;
+    }
+    if (validator.isEmpty(dateOfBirth.value)) {
+      setDateOfBirth({
+        ...dateOfBirth,
+        error: true,
+        helperText: 'Date of Birth is required',
+      });
     }
 
     if (notValid) {
@@ -124,7 +139,13 @@ export default function Driver() {
   };
   const renderDriversList = () => {
     return (
-      <Grid container className='drivers-list' spacing={3} padding={3}>
+      <Grid
+        container
+        className={`drivers-list ${showAddIcon ? '' : 'showScroll'}`}
+        spacing={3}
+        padding={3}
+        marginTop={showAddIcon ? -2 : 3.5}
+      >
         {drivers.map((d) => {
           return <DriverCard key={d.userId} driver={d}></DriverCard>;
         })}
@@ -150,6 +171,7 @@ export default function Driver() {
             {showAddIcon === true ? (
               <div className='new-driver-icon'>
                 <Fab
+                  sx={{ marginLeft: 15 }}
                   className='icon'
                   color='primary'
                   aria-label='add'
@@ -169,12 +191,13 @@ export default function Driver() {
           {showAddIcon === true ? (
             <></>
           ) : (
-            <Grid item md={3.6} className='right'>
+            <Grid md={3.6} className='right' marginTop={2}>
               <Grid
                 spacing={2}
                 container
                 justifyContent={'flex-end'}
-                alignItems={'center'}
+                align
+                s={'center'}
               >
                 <Grid item md={5}>
                   <h3>Add New Driver</h3>
@@ -193,135 +216,141 @@ export default function Driver() {
                   </Fab>
                 </Grid>
               </Grid>
-              <TextField
-                name='email_address'
-                type='email'
-                label='Email Address'
-                fullWidth={true}
-                onChange={(e) => {
-                  setEmailAddress({ ...emailAddress, value: e.target.value });
-                }}
-                required
-                error={emailAddress.error}
-                helperText={emailAddress.helperText}
-                autoFocus={true}
-              />
-              <TextField
-                name='password'
-                type='password'
-                label='Password'
-                fullWidth={true}
-                onChange={(e) => {
-                  setPassword({ ...password, value: e.target.value });
-                }}
-                required
-                error={password.error}
-                helperText={password.helperText}
-              />
-              <TextField
-                name='mobile'
-                type='text'
-                label='Mobile'
-                fullWidth={true}
-                onChange={(e) => {
-                  setMobile({ ...mobile, value: e.target.value });
-                }}
-                required
-                error={mobile.error}
-                helperText={mobile.helperText}
-              />
-              <TextField
-                name='first_name'
-                type='text'
-                label='First Name'
-                fullWidth={true}
-                onChange={(e) => {
-                  setFirstName({ ...firstName, value: e.target.value });
-                }}
-                required
-                error={firstName.error}
-                helperText={firstName.helperText}
-              />
-              <TextField
-                name='last_name'
-                type='text'
-                label='Last Name'
-                fullWidth={true}
-                onChange={(e) => {
-                  setLastName({ ...lastName, value: e.target.value });
-                }}
-                required
-                error={lastName.error}
-                helperText={lastName.helperText}
-              />
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DesktopDatePicker
-                  label='Date Of Birth'
-                  onChange={(val) =>
-                    setDateOfBirth({ ...dateOfBirth, value: val })
-                  }
-                  value={dateOfBirth.value}
-                  inputFormat='yyyy/MM/dd'
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth={true}
-                      name='date_of_birth_field'
-                      id='date_of_birth_field'
-                    />
-                  )}
+              <div className='fields'>
+                <TextField
+                  name='email_address'
+                  type='email'
+                  label='Email Address'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setEmailAddress({ ...emailAddress, value: e.target.value });
+                  }}
+                  required
+                  error={emailAddress.error}
+                  helperText={emailAddress.helperText}
+                  autoFocus={true}
                 />
-              </LocalizationProvider>
-              <TextField
-                name='address'
-                type='text'
-                label='Address'
-                fullWidth={true}
-                onChange={(e) => {
-                  setAddress({ ...address, value: e.target.value });
-                }}
-                required
-                error={address.error}
-                helperText={address.helperText}
-                multiline
-                maxRows={4}
-              />
-              <TextField
-                name='nic'
-                type='text'
-                label='NIC'
-                fullWidth={true}
-                onChange={(e) => {
-                  setNic({ ...nic, value: e.target.value });
-                }}
-                required
-                error={nic.error}
-                helperText={nic.helperText}
-                multiline
-                maxRows={4}
-              />
-              <TextField
-                name='backup_mobile_number'
-                type='text'
-                label='Backup Mobile Number'
-                fullWidth={true}
-                onChange={(e) => {
-                  setBackupMobile({ ...backupMobile, value: e.target.value });
-                }}
-                required
-                error={backupMobile.error}
-                helperText={backupMobile.helperText}
-              />
-              <LoadingButton
-                variant='contained'
-                color='primary'
-                size='large'
-                fullWidth={true}
-                onClick={registerDriver}
-                loading={loading}
-              >
-                Sign Up
-              </LoadingButton>
+                <TextField
+                  name='password'
+                  type='password'
+                  label='Password'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setPassword({ ...password, value: e.target.value });
+                  }}
+                  required
+                  error={password.error}
+                  helperText={password.helperText}
+                />
+                <TextField
+                  name='mobile'
+                  type='text'
+                  label='Mobile'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setMobile({ ...mobile, value: e.target.value });
+                  }}
+                  required
+                  error={mobile.error}
+                  helperText={mobile.helperText}
+                />
+                <TextField
+                  name='first_name'
+                  type='text'
+                  label='First Name'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setFirstName({ ...firstName, value: e.target.value });
+                  }}
+                  required
+                  error={firstName.error}
+                  helperText={firstName.helperText}
+                />
+                <TextField
+                  name='last_name'
+                  type='text'
+                  label='Last Name'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setLastName({ ...lastName, value: e.target.value });
+                  }}
+                  required
+                  error={lastName.error}
+                  helperText={lastName.helperText}
+                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DesktopDatePicker
+                    label='Date Of Birth'
+                    onChange={(val) =>
+                      setDateOfBirth({
+                        ...dateOfBirth,
+                        error: true,
+                        helperText: 'Date of Birth is required',
+                      })
+                    }
+                    value={dateOfBirth.value}
+                    inputFormat='yyyy/MM/dd'
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth={true}
+                        name='date_of_birth_field'
+                        id='date_of_birth_field'
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <TextField
+                  name='address'
+                  type='text'
+                  label='Address'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setAddress({ ...address, value: e.target.value });
+                  }}
+                  required
+                  error={address.error}
+                  helperText={address.helperText}
+                  multiline
+                  maxRows={4}
+                />
+                <TextField
+                  name='nic'
+                  type='text'
+                  label='NIC'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setNic({ ...nic, value: e.target.value });
+                  }}
+                  required
+                  error={nic.error}
+                  helperText={nic.helperText}
+                  multiline
+                  maxRows={4}
+                />
+                <TextField
+                  name='backup_mobile_number'
+                  type='text'
+                  label='Backup Mobile Number'
+                  fullWidth={true}
+                  onChange={(e) => {
+                    setBackupMobile({ ...backupMobile, value: e.target.value });
+                  }}
+                  required
+                  error={backupMobile.error}
+                  helperText={backupMobile.helperText}
+                />
+                <LoadingButton
+                  variant='contained'
+                  color='primary'
+                  size='large'
+                  fullWidth={true}
+                  onClick={registerDriver}
+                  loading={loading}
+                >
+                  Sign Up
+                </LoadingButton>
+              </div>
             </Grid>
           )}
         </Grid>

@@ -7,7 +7,7 @@
     flex-wrap: wrap;
     text-decoration: none;
     list-style: none;
-    width: 100vw;
+    width: 98vw;
     padding: 0.8rem 0;
     .MuiButtonBase-root {
       width: 6rem;
@@ -39,22 +39,35 @@
 
   @media (max-width: 1049px) {
     .navbar-parent {
-      width: 100vw;
+      width: unset;
+      flex-shrink: 1;
     }
     .navbar-parent li:last-child {
       margin-left: unset;
     }
     .navbar-parent li {
-      width: calc(50vw - 1.2rem);
+      width: calc(50vw - 2rem);
       display: inline-flex;
       justify-content: center;
       margin: 0.4rem 0.6rem;
       border: 0.1px solid gray;
       border-radius: 0.6rem;
     }
-    .navbar-parent li:first-child,
+    .navbar-parent li:first-child {
+      border: unset;
+      width: auto;
+    }
+    .navbar-parent li:nth-child(2) {
+      flex-grow: 1;
+      margin-right: 1.8rem;
+    }
     .navbar-parent li:last-child {
       border: unset;
+      flex-grow: 1;
+      button {
+        width: 20rem;
+        margin-right: 2rem;
+      }
     }
     .navbar-parent li a {
       display: block;
@@ -67,13 +80,25 @@
     }
   }
   @media (max-width: 613px) {
+    .navbar-parent {
+      width: unset;
+    }
     .navbar-parent li {
-      width: 100vw;
+      flex-grow: 1;
+      width: calc(100vw - 2rem);
+      margin: 0.4rem 0.8rem;
+    }
+    .navbar-parent li:first-child {
+      flex-grow: 1;
+      margin: 0.4rem 0.8rem;
+    }
+    .navbar-parent li:nth-child(2) {
+      flex-grow: 1;
       margin: 0.4rem 0.8rem;
     }
     .navbar-parent li a,
     .navbar-parent li button {
-      width: calc(100wv - 1.6rem);
+      width: 100%;
     }
   }
 }
