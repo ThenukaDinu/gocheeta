@@ -143,7 +143,9 @@ public class DriverService implements IDriverService {
 
     @Override
     public Driver convertRequestToEntity(DriverRequest driverRequest, User nUser, Driver driver) {
-        nUser.setPassword(driverRequest.getPassword());
+        if (driverRequest.getPassword() != null) {
+           nUser.setPassword(driverRequest.getPassword());
+        }
         nUser.setEmail(driverRequest.getUsername());
         nUser.setUsername(driverRequest.getUsername());
         nUser.setAddress(driverRequest.getAddress());

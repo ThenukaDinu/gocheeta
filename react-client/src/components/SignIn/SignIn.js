@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUserDetails } from '../../store/userSlice';
+import { removeUserDetails, setUserDetails } from '../../store/userSlice';
 import { toast } from 'react-toastify';
 
 export default function SignIn() {
@@ -71,7 +71,6 @@ export default function SignIn() {
       console.error(error.response);
     }
     if (!response) return;
-    console.log(response);
     if (response.status === 200) {
       saveJwtCookie(response);
       dispatch(setUserDetails(response.data.user));
@@ -89,10 +88,20 @@ export default function SignIn() {
       if (!localStorage.getItem('token')) {
         return;
       }
+      let response;
       if (localStorage.getItem('token')) {
-        const response = await axios.get('/secured');
-        if (response.status === 200) {
+        try {
+          response = await axios.get('/secured');
+        } catch (error) {
+          if (error && error.response) {
+            response = await error.response;
+          }
+        }
+        console.log(response.response);
+        if (response && response.status === 200) {
           navigate('/');
+        } else if (response && response.status === 401) {
+          dispatch(removeUserDetails());
         }
       }
     };

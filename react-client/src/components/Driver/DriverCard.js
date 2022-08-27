@@ -9,9 +9,29 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import ConfirmationDialog from '../Common/ConfirmationDialog';
 import { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import UpdateDriver from './UpdateDriver';
 
-export default function DriverCard({ driver }) {
+export default function DriverCard({ driver, setDrivers }) {
+  const deleteSuccess = () => toast.success('Driver deleted successfully.');
+  const otherError = () =>
+    toast.error('Something went wrong, Please contact support service.');
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showUpdateDriver, setShowUpdateDriver] = useState(false);
+  const renderUpdateDriver = () => {
+    return showUpdateDriver ? (
+      <UpdateDriver
+        open={showUpdateDriver}
+        handleClose={() => {
+          setShowUpdateDriver(!showUpdateDriver);
+        }}
+        driver={driver}
+      />
+    ) : (
+      <></>
+    );
+  };
   const renderDeleteConfirmation = () => {
     return showDeleteConfirmation ? (
       <ConfirmationDialog
@@ -32,13 +52,26 @@ export default function DriverCard({ driver }) {
   const handleClose = () => {
     setShowDeleteConfirmation(!showDeleteConfirmation);
   };
-  const handleConfirm = () => {
-    // api call
+  const handleConfirm = async () => {
+    try {
+      const response = await axios.delete(`/drivers/${driver.driverId}`);
+      if (response.status === 200) {
+        setDrivers((d) => d.filter((dr) => dr.driverId !== driver.driverId));
+        deleteSuccess();
+        return;
+      } else {
+        otherError();
+      }
+    } catch (error) {
+      otherError();
+      console.error(error);
+    }
     setShowDeleteConfirmation(!showDeleteConfirmation);
   };
   return (
     <>
       {renderDeleteConfirmation()}
+      {renderUpdateDriver()}
       <Grid item className='driver-card' xs={true} md={4} lg={3}>
         <Card>
           <CardMedia
@@ -74,8 +107,13 @@ export default function DriverCard({ driver }) {
                 fontSize='small'
               />
             </Button>
-            <Button variant='text' size='small' color='warning'>
-              Show More
+            <Button
+              variant='text'
+              size='small'
+              color='warning'
+              onClick={() => setShowUpdateDriver(!showUpdateDriver)}
+            >
+              Update
               <ReadMoreIcon
                 sx={{ marginLeft: 1, marginBottom: 0.3 }}
                 fontSize='small'

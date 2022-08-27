@@ -160,7 +160,9 @@ public class UserService implements IUserService, UserDetailsService {
         userRoleDTO.setFullName(user.getFullName());
         userRoleDTO.setMobile(user.getMobile());
         userRoleDTO.setAddress(user.getAddress());
-        userRoleDTO.setAvatarUrl(user.getPhotosImagePath());
+        if (user.getPhotosImagePath() != null) {
+            userRoleDTO.setAvatarUrl(user.getPhotosImagePath());
+        }
         ArrayList<RoleDTO> roleDTOS = new ArrayList<RoleDTO>();
         for (Role role : user.getRoles()) {
             RoleDTO roleDTO = new RoleDTO();

@@ -25,18 +25,18 @@ export default function Driver() {
   const [showAddIcon, setShowAddIcon] = useState(true);
   const [emailAddress, setEmailAddress] = useState({
     error: false,
-    value: null,
+    value: '',
   });
-  const [password, setPassword] = useState({ error: false, value: null });
-  const [mobile, setMobile] = useState({ error: false, value: null });
-  const [firstName, setFirstName] = useState({ error: false, value: null });
-  const [lastName, setLastName] = useState({ error: false, value: null });
+  const [password, setPassword] = useState({ error: false, value: '' });
+  const [mobile, setMobile] = useState({ error: false, value: '' });
+  const [firstName, setFirstName] = useState({ error: false, value: '' });
+  const [lastName, setLastName] = useState({ error: false, value: '' });
   const [dateOfBirth, setDateOfBirth] = useState({ error: false, value: null });
-  const [address, setAddress] = useState({ error: false, value: null });
-  const [nic, setNic] = useState({ error: false, value: null });
+  const [address, setAddress] = useState({ error: false, value: '' });
+  const [nic, setNic] = useState({ error: false, value: '' });
   const [backupMobile, setBackupMobile] = useState({
     error: false,
-    value: null,
+    value: '',
   });
   const [loading, setLoading] = useState(false);
   const registerDriver = async () => {
@@ -50,6 +50,27 @@ export default function Driver() {
       error: false,
       helperText: '',
     });
+    setAddress({
+      ...address,
+      error: false,
+      helperText: '',
+    });
+    setMobile({
+      ...mobile,
+      error: false,
+      helperText: '',
+    });
+    setNic({
+      ...nic,
+      error: false,
+      helperText: '',
+    });
+    setBackupMobile({
+      ...backupMobile,
+      error: false,
+      helperText: '',
+    });
+
     let notValid = false;
     if (validator.isEmpty(firstName.value)) {
       setFirstName({
@@ -94,11 +115,43 @@ export default function Driver() {
       });
       notValid = true;
     }
-    if (validator.isEmpty(dateOfBirth.value)) {
+    if (!dateOfBirth.value) {
       setDateOfBirth({
         ...dateOfBirth,
         error: true,
         helperText: 'Date of Birth is required',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(mobile.value)) {
+      setMobile({
+        ...mobile,
+        error: true,
+        helperText: 'Mobile is required.',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(address.value)) {
+      setAddress({
+        ...address,
+        error: true,
+        helperText: 'Address is required.',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(nic.value)) {
+      setNic({
+        ...nic,
+        error: true,
+        helperText: 'NIC is required.',
+      });
+      notValid = true;
+    }
+    if (validator.isEmpty(backupMobile.value)) {
+      setBackupMobile({
+        ...backupMobile,
+        error: true,
+        helperText: 'Backup mobile is request.',
       });
     }
 
@@ -128,7 +181,12 @@ export default function Driver() {
       setLoading(false);
       console.error(error);
       if (error.response.status === 400) {
-        invalidDetails();
+        if (error.response && error.response.data) {
+          const returnedError = () => toast.error(error.response.data);
+          returnedError();
+        } else {
+          invalidDetails();
+        }
         return;
       }
       otherError();
@@ -147,7 +205,13 @@ export default function Driver() {
         marginTop={showAddIcon ? -2 : 3.5}
       >
         {drivers.map((d) => {
-          return <DriverCard key={d.userId} driver={d}></DriverCard>;
+          return (
+            <DriverCard
+              key={d.userId}
+              driver={d}
+              setDrivers={setDrivers}
+            ></DriverCard>
+          );
         })}
       </Grid>
     );
@@ -284,8 +348,7 @@ export default function Driver() {
                     onChange={(val) =>
                       setDateOfBirth({
                         ...dateOfBirth,
-                        error: true,
-                        helperText: 'Date of Birth is required',
+                        value: val,
                       })
                     }
                     value={dateOfBirth.value}
@@ -296,6 +359,8 @@ export default function Driver() {
                         fullWidth={true}
                         name='date_of_birth_field'
                         id='date_of_birth_field'
+                        error={dateOfBirth.error}
+                        helperText={dateOfBirth.helperText}
                       />
                     )}
                   />
