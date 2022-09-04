@@ -92,20 +92,20 @@ public class BranchService implements IBranchService {
         branchDTO.setContactNo(branch.getContactNo());
 
         if (branch.getVehicles() != null) {
-            ArrayList<VehicleDTO> vehicleDTOS = new ArrayList<>();
+            ArrayList<Integer> VehiclesList = new ArrayList<>();
             for (Vehicle vehicle : branch.getVehicles()) {
-                VehicleDTO vehicleDTO = vehicleService.convertEntityToDto(vehicle);
-                if (vehicleDTO != null) vehicleDTOS.add(vehicleDTO);
+                if (vehicle != null) VehiclesList.add(vehicle.getId());
             }
-            branchDTO.setVehicles(vehicleDTOS);
+            branchDTO.setVehicles(VehiclesList);
         }
         if (branch.getDrivers() != null) {
-            ArrayList<DriverDTO> driverDTOS = new ArrayList<>();
+            ArrayList<Integer> driversList = new ArrayList<>();
             for (Driver driver : branch.getDrivers()) {
-                DriverDTO driverDTO = driverService.convertEntityToDto(driver);
-                if (driverDTO != null) driverDTOS.add(driverDTO);
+                if (driver != null) {
+                    if (driver != null) driversList.add(driver.getId());
+                }
             }
-            branchDTO.setDrivers(driverDTOS);
+            branchDTO.setDrivers(driversList);
         }
         return branchDTO;
     }

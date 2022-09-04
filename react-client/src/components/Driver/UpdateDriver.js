@@ -3,7 +3,16 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Grid, TextField } from '@mui/material';
+import {
+  Chip,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+} from '@mui/material';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -12,6 +21,7 @@ import { toast } from 'react-toastify';
 import validator from 'validator';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { Box } from '@mui/system';
 
 export default function UpdateDriver(props) {
   const invalidDetails = () =>
@@ -23,7 +33,7 @@ export default function UpdateDriver(props) {
     error: false,
     value: '',
   });
-  const [password, setPassword] = useState({ error: false, value: '' });
+  // const [password, setPassword] = useState({ error: false, value: '' });
   const [mobile, setMobile] = useState({ error: false, value: '' });
   const [firstName, setFirstName] = useState({ error: false, value: '' });
   const [lastName, setLastName] = useState({ error: false, value: '' });
@@ -34,11 +44,15 @@ export default function UpdateDriver(props) {
     error: false,
     value: '',
   });
+  const [branch, setBranch] = useState({ value: '' });
+  const [branches, setBranches] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [selectedVehicles, setSelectedVehicles] = useState([]);
   const registerDriver = async () => {
     setFirstName({ ...firstName, error: false, helperText: '' });
     setLastName({ ...lastName, error: false, helperText: '' });
     setEmailAddress({ ...emailAddress, error: false, helperText: '' });
-    setPassword({ ...password, error: false, helperText: '' });
+    // setPassword({ ...password, error: false, helperText: '' });
     setDateOfBirth({
       ...dateOfBirth,
       error: false,
@@ -101,14 +115,14 @@ export default function UpdateDriver(props) {
       });
       notValid = true;
     }
-    if (validator.isEmpty(password.value)) {
-      setPassword({
-        ...password,
-        error: true,
-        helperText: 'Password is required',
-      });
-      notValid = true;
-    }
+    // if (validator.isEmpty(password.value)) {
+    //   setPassword({
+    //     ...password,
+    //     error: true,
+    //     helperText: 'Password is required',
+    //   });
+    //   notValid = true;
+    // }
     if (!dateOfBirth.value) {
       setDateOfBirth({
         ...dateOfBirth,
@@ -155,9 +169,11 @@ export default function UpdateDriver(props) {
 
     let response = null;
     try {
-      response = await axios.put('/drivers', {
+      const vehiclesIdsList = [];
+      selectedVehicles.forEach((v) => vehiclesIdsList.push(v.id));
+      response = await axios.put('/drivers/' + props.driver.driverId, {
         username: emailAddress.value,
-        password: password.value,
+        password: null,
         mobile: mobile.value,
         firstName: firstName.value,
         lastName: lastName.value,
@@ -168,10 +184,17 @@ export default function UpdateDriver(props) {
         address: address.value,
         nic: nic.value,
         backupMobile: backupMobile.value,
+        branchId: branch.value,
+        vehicles: vehiclesIdsList,
       });
     } catch (error) {
       console.error(error);
-      if (error.response.status === 400) {
+      if (
+        error &&
+        error.response &&
+        error.response.status &&
+        error.response.status === 400
+      ) {
         if (error.response && error.response.data) {
           const returnedError = () => toast.error(error.response.data);
           returnedError();
@@ -183,18 +206,77 @@ export default function UpdateDriver(props) {
       otherError();
     }
     if (response && (response.status === 201 || response.status === 200)) {
-      // setDrivers((drivers) => [...drivers, response.data]);
+      props.setDrivers((drivers) => [
+        ...drivers.filter((a) => a.driverId !== response.data.driverId),
+        response.data,
+      ]);
+      const updateSuccess = () => toast.success('Driver updated successfully.');
+      updateSuccess();
+      props.handleClose();
     }
+  };
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
   };
   useEffect(() => {
     setEmailAddress({ ...emailAddress, value: props.driver.email });
     setMobile({ ...mobile, value: props.driver.mobile });
     setFirstName({ ...firstName, value: props.driver.firstName });
     setLastName({ ...lastName, value: props.driver.lastName });
-    setDateOfBirth({ ...dateOfBirth, value: props.driver.dateOfBirth });
+    setDateOfBirth({
+      ...dateOfBirth,
+      value: new Date(props.driver.dateOfBirth),
+    });
     setAddress({ ...address, value: props.driver.address });
     setNic({ ...nic, value: props.driver.nic });
     setBackupMobile({ ...backupMobile, value: props.driver.backupMobile });
+    setBranch({
+      ...branch,
+      value: props.driver.branch ? props.driver.branch.id : '',
+    });
+    setSelectedVehicles(props.driver.vehicles);
+
+    const getBranches = async () => {
+      try {
+        const response = await axios.get('/branches');
+        if (
+          response &&
+          response &&
+          response.status &&
+          response.status === 200
+        ) {
+          setBranches(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBranches();
+
+    const getVehicles = async () => {
+      try {
+        const response = await axios.get('/vehicles');
+        if (
+          response &&
+          response &&
+          response.status &&
+          response.status === 200
+        ) {
+          setVehicles(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getVehicles();
     // eslint-disable-next-line
   }, []);
   return (
@@ -202,7 +284,7 @@ export default function UpdateDriver(props) {
       <Dialog open={props.open} onClose={props.handleClose}>
         <DialogTitle>Update Driver</DialogTitle>
         <DialogContent>
-          <Grid md={12} marginTop={2} className='update-modal'>
+          <Grid item md={12} marginTop={2} className='update-modal'>
             <div className='fields'>
               <TextField
                 name='email_address'
@@ -217,7 +299,7 @@ export default function UpdateDriver(props) {
                 disabled
                 value={emailAddress.value}
               />
-              <TextField
+              {/* <TextField
                 name='password'
                 type='password'
                 label='Password'
@@ -228,7 +310,8 @@ export default function UpdateDriver(props) {
                 required
                 error={password.error}
                 helperText={password.helperText}
-              />
+                disabled
+              /> */}
               <TextField
                 name='mobile'
                 type='text'
@@ -332,6 +415,58 @@ export default function UpdateDriver(props) {
                 helperText={backupMobile.helperText}
                 value={backupMobile.value}
               />
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>Branch</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='demo-simple-select'
+                  value={branch.value}
+                  label='Branch'
+                  onChange={(e) => {
+                    setBranch({ ...branch, value: e.target.value });
+                  }}
+                >
+                  {branches.map((b) => {
+                    return (
+                      <MenuItem key={`branch-${b.id}`} value={b.id}>
+                        {b.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id='demo-multiple-chip-label'>Chip</InputLabel>
+                <Select
+                  labelId='demo-multiple-chip-label'
+                  id='demo-multiple-chip'
+                  multiple
+                  value={selectedVehicles}
+                  onChange={(e) => {
+                    setSelectedVehicles(e.target.value);
+                  }}
+                  input={
+                    <OutlinedInput id='select-multiple-chip' label='Vehicles' />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((selVehicle) => (
+                        <Chip
+                          key={`sel-veh-${selVehicle.id}`}
+                          label={selVehicle.model}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {vehicles.map((v) => (
+                    <MenuItem key={`vehicle-${v.id}`} value={v}>
+                      {v.model}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </div>
           </Grid>
         </DialogContent>

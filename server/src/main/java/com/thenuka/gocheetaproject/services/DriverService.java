@@ -143,20 +143,40 @@ public class DriverService implements IDriverService {
 
     @Override
     public Driver convertRequestToEntity(DriverRequest driverRequest, User nUser, Driver driver) {
-        if (driverRequest.getPassword() != null) {
+        // set user
+        if (driverRequest.getPassword() != null && !driverRequest.getPassword().trim().isEmpty()) {
            nUser.setPassword(driverRequest.getPassword());
         }
-        nUser.setEmail(driverRequest.getUsername());
-        nUser.setUsername(driverRequest.getUsername());
-        nUser.setAddress(driverRequest.getAddress());
-        nUser.setDateOfBirth(driverRequest.getDateOfBirth());
-        nUser.setMobile(driverRequest.getMobile());
-        nUser.setFirstName(driverRequest.getFirstName());
-        nUser.setLastName(driverRequest.getLastName());
+        if (driverRequest.getUsername() != null && !driverRequest.getUsername().trim().isEmpty()) {
+            nUser.setEmail(driverRequest.getUsername());
+        }
+        if (driverRequest.getUsername() != null && !driverRequest.getUsername().trim().isEmpty()) {
+            nUser.setUsername(driverRequest.getUsername());
+        }
+        if (driverRequest.getAddress() != null && !driverRequest.getAddress().trim().isEmpty()) {
+            nUser.setAddress(driverRequest.getAddress());
+        }
+        if (driverRequest.getDateOfBirth() != null) {
+            nUser.setDateOfBirth(driverRequest.getDateOfBirth());
+        }
+        if (driverRequest.getMobile() != null && !driverRequest.getMobile().trim().isEmpty()) {
+            nUser.setMobile(driverRequest.getMobile());
+        }
+        if (driverRequest.getFirstName() != null && !driverRequest.getFirstName().trim().isEmpty()) {
+            nUser.setFirstName(driverRequest.getFirstName());
+        }
+        if (driverRequest.getLastName() != null && !driverRequest.getLastName().trim().isEmpty()) {
+            nUser.setLastName(driverRequest.getLastName());
+        }
         driver.setUser(nUser);
 
-        driver.setNIC(driverRequest.getNIC());
-        driver.setBackupMobile(driverRequest.getBackupMobile());
+        // set driver
+        if (driverRequest.getNIC() != null && !driverRequest.getNIC().trim().isEmpty()) {
+            driver.setNIC(driverRequest.getNIC());
+        }
+        if (driverRequest.getBackupMobile() != null && !driverRequest.getBackupMobile().trim().isEmpty()) {
+            driver.setBackupMobile(driverRequest.getBackupMobile());
+        }
         if (branchService.existsById(driverRequest.getBranchId())) {
             driver.setBranch(branchService.findById(driverRequest.getBranchId()));
         }
@@ -164,11 +184,12 @@ public class DriverService implements IDriverService {
         if (driverRequest.getVehicles() != null) {
             for (Integer vehicleId : driverRequest.getVehicles()) {
                 if (vehicleService.existsById(vehicleId)) {
-                    vehiclesList.add(vehicleService.findById(vehicleId));
+                    Vehicle veh = vehicleService.findById(vehicleId);
+                    veh.setDriver(driver);
+                    vehicleService.save(veh);
                 }
             }
         }
-        driver.setVehicles(vehiclesList);
         return driver;
     }
 }

@@ -13,6 +13,6 @@ public class BranchDTO {
     private String contactNo;
     private String address;
 
-    private ArrayList<VehicleDTO> vehicles;
-    private ArrayList<DriverDTO> drivers;
+    private ArrayList<Integer> vehicles;
+    private ArrayList<Integer> drivers;
 }

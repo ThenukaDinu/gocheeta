@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import { Button, Grid } from '@mui/material';
+import { Button, Chip, Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import ConfirmationDialog from '../Common/ConfirmationDialog';
@@ -12,6 +12,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import UpdateDriver from './UpdateDriver';
+import { Box } from '@mui/system';
 
 export default function DriverCard({ driver, setDrivers }) {
   const deleteSuccess = () => toast.success('Driver deleted successfully.');
@@ -27,6 +28,7 @@ export default function DriverCard({ driver, setDrivers }) {
           setShowUpdateDriver(!showUpdateDriver);
         }}
         driver={driver}
+        setDrivers={setDrivers}
       />
     ) : (
       <></>
@@ -73,7 +75,7 @@ export default function DriverCard({ driver, setDrivers }) {
       {renderDeleteConfirmation()}
       {renderUpdateDriver()}
       <Grid item className='driver-card' xs={true} md={4} lg={3}>
-        <Card>
+        <Card style={{ height: '100%' }}>
           <CardMedia
             component='img'
             height={200}
@@ -84,12 +86,53 @@ export default function DriverCard({ driver, setDrivers }) {
             <Typography gutterBottom variant='h5' component='div'>
               {driver.firstName}
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
-              {driver.email} <br /> <br />
-              {driver.dateOfBirth} <br /> <br />
-              {driver.mobile} <br /> <br />
-              {driver.nic}
+            <Typography variant='subtitle1' color='text.secondary'>
+              <Box sx={{ marginBottom: 1 }}>
+                <b>email: </b> {driver.email}
+              </Box>
+              <Box sx={{ marginBottom: 1 }}>
+                <b>DOB: </b>
+                {driver.dateOfBirth}
+              </Box>
+              <Box sx={{ marginBottom: 1 }}>
+                <b>mobile: </b>
+                {driver.mobile}{' '}
+              </Box>
+              <Box sx={{ marginBottom: 1 }}>
+                <b>NIC: </b>
+                {driver.nic}
+              </Box>
             </Typography>
+            {driver.branch ? (
+              <Chip
+                sx={{ marginTop: 2 }}
+                label={driver.branch.name}
+                color='success'
+              />
+            ) : (
+              <Chip
+                sx={{ marginTop: 2 }}
+                label='No Branch Assigned'
+                color='primary'
+              />
+            )}
+            <div>
+              {driver.vehicles && driver.vehicles.length ? (
+                driver.vehicles.map((v) => (
+                  <Chip
+                    sx={{ marginTop: 2, marginRight: 1 }}
+                    label={v.model}
+                    color='success'
+                  />
+                ))
+              ) : (
+                <Chip
+                  sx={{ marginTop: 2 }}
+                  label='No Vehicles Assigned'
+                  color='info'
+                />
+              )}
+            </div>
           </CardContent>
           <CardActions>
             <Button
