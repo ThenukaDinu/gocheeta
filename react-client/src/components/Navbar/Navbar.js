@@ -42,6 +42,9 @@ export default function Navbar() {
               <Link to='/drivers'>Drivers</Link>
             </li>
             <li>
+              <Link to='/vehicles'>Vehicles</Link>
+            </li>
+            <li>
               <Link to='/branches'>Branches</Link>
             </li>
             <li>

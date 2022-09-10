@@ -10,6 +10,7 @@ import com.thenuka.gocheetaproject.requests.VehicleRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,21 +97,35 @@ public class VehicleService implements IVehicleService {
 
     @Override
     public Vehicle convertRequestToEntity(VehicleRequest vehicleRequest, Vehicle vehicle) {
-        vehicle.setModel(vehicleRequest.getModel());
-        vehicle.setVehicleType(publicEnum.VehicleType.valueOf(vehicleRequest.getVehicleType()));
-        vehicle.setBrand(vehicleRequest.getBrand());
-        vehicle.setNumberPlateNo(vehicleRequest.getNumberPlateNo());
+        if (StringUtils.hasText(vehicleRequest.getModel())) {
+            vehicle.setModel(vehicleRequest.getModel());
+        }
+        if (StringUtils.hasText(vehicleRequest.getVehicleType())) {
+            vehicle.setVehicleType(publicEnum.VehicleType.valueOf(vehicleRequest.getVehicleType()));
+        }
+        if (StringUtils.hasText(vehicleRequest.getBrand())) {
+            vehicle.setBrand(vehicleRequest.getBrand());
+        }
+        if (StringUtils.hasText(vehicleRequest.getNumberPlateNo())) {
+            vehicle.setNumberPlateNo(vehicleRequest.getNumberPlateNo());
+        }
         if (categoryService.existsById(vehicleRequest.getCategoryId())) {
             Category category = categoryService.findById(vehicleRequest.getCategoryId());
             vehicle.setCategory(category);
+        } else {
+            vehicle.setCategory(null);
         }
         if (branchService.existsById(vehicleRequest.getBranchId())) {
             Branch branch = branchService.findById(vehicleRequest.getBranchId());
             vehicle.setBranch(branch);
+        } else {
+            vehicle.setBranch(null);
         }
         if (driverService.existsById(vehicleRequest.getDriverId())) {
             Driver driver = driverService.findById(vehicleRequest.getDriverId());
             vehicle.setDriver(driver);
+        } else {
+            vehicle.setDriver(null);
         }
         return vehicle;
     }

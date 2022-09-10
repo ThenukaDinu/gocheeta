@@ -204,10 +204,10 @@ export default function Driver() {
         padding={3}
         marginTop={showAddIcon ? -2 : 3.5}
       >
-        {drivers.map((d) => {
+        {drivers.map((d, index) => {
           return (
             <DriverCard
-              key={d.userId}
+              key={`driver-card-${d.userId}-${index}`}
               driver={d}
               setDrivers={setDrivers}
             ></DriverCard>
@@ -256,13 +256,7 @@ export default function Driver() {
             <></>
           ) : (
             <Grid md={3.6} className='right' marginTop={2}>
-              <Grid
-                spacing={2}
-                container
-                justifyContent={'flex-end'}
-                align
-                s={'center'}
-              >
+              <Grid spacing={2} container justifyContent={'flex-end'}>
                 <Grid item md={5}>
                   <h3>Add New Driver</h3>
                 </Grid>

@@ -33,7 +33,6 @@ export default function UpdateDriver(props) {
     error: false,
     value: '',
   });
-  // const [password, setPassword] = useState({ error: false, value: '' });
   const [mobile, setMobile] = useState({ error: false, value: '' });
   const [firstName, setFirstName] = useState({ error: false, value: '' });
   const [lastName, setLastName] = useState({ error: false, value: '' });
@@ -52,7 +51,6 @@ export default function UpdateDriver(props) {
     setFirstName({ ...firstName, error: false, helperText: '' });
     setLastName({ ...lastName, error: false, helperText: '' });
     setEmailAddress({ ...emailAddress, error: false, helperText: '' });
-    // setPassword({ ...password, error: false, helperText: '' });
     setDateOfBirth({
       ...dateOfBirth,
       error: false,
@@ -115,14 +113,6 @@ export default function UpdateDriver(props) {
       });
       notValid = true;
     }
-    // if (validator.isEmpty(password.value)) {
-    //   setPassword({
-    //     ...password,
-    //     error: true,
-    //     helperText: 'Password is required',
-    //   });
-    //   notValid = true;
-    // }
     if (!dateOfBirth.value) {
       setDateOfBirth({
         ...dateOfBirth,
@@ -299,19 +289,6 @@ export default function UpdateDriver(props) {
                 disabled
                 value={emailAddress.value}
               />
-              {/* <TextField
-                name='password'
-                type='password'
-                label='Password'
-                fullWidth={true}
-                onChange={(e) => {
-                  setPassword({ ...password, value: e.target.value });
-                }}
-                required
-                error={password.error}
-                helperText={password.helperText}
-                disabled
-              /> */}
               <TextField
                 name='mobile'
                 type='text'

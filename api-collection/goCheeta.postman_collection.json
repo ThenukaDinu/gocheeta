@@ -19,7 +19,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"testadmin1@admin.edu\",\r\n    \"password\": \"password\"\r\n}",
+							"raw": "{\r\n    \"username\": \"testadmin2@admin.edu\",\r\n    \"password\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -166,6 +166,45 @@
 								"2"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Avatar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/Thenuka Dinu/Pictures/my pics/FB_IMG_1630175981935.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/update-avatar/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"update-avatar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetImage",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -1112,7 +1151,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4xQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjA0ODU2MTMsImV4cCI6MTY2MDUwMzYxM30.qQCXtG2CBEQs1tx2dS13GwfQz8HZ_RnKLnI_syeCdtY",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0YWRtaW4yQGFkbWluLmVkdSIsInJvbGVzIjoiUk9MRV9BRE1JTixST0xFX1VTRVIiLCJpYXQiOjE2NjI2MjQ2NDMsImV4cCI6MTY2MjY0MjY0M30.2syAHWm73UtF4sz2r8SkWcDI3aQAkhY3BfHmoCNCBLo",
 				"type": "string"
 			}
 		]

@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { useSelector } from 'react-redux';
+import Vehicle from '../Vehicle/Vehicle';
 
 function App() {
   const userDetails = useSelector((state) => state.user.userDetails);
@@ -55,6 +56,7 @@ function App() {
             <Route path='/signIn' element={<SignIn />} />
             <Route path='/signUp' element={<SignUp />} />
             <Route path='/drivers' element={<Driver />} />
+            <Route path='/vehicles' element={<Vehicle />} />
           </Routes>
         </div>
       </ThemeProvider>
