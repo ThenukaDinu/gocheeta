@@ -93,6 +93,7 @@ public class BookingService implements IBookingService {
         booking.setPickUpLocation(bookingRequest.getPickUpLocation());
         booking.setDropOffLocation(bookingRequest.getDropOffLocation());
         booking.setStatus(publicEnum.BookingStatus.valueOf(bookingRequest.getStatus()));
+        booking.setDistance(bookingRequest.getDistance());
         if (userService.existsById(bookingRequest.getUserId())) {
             booking.setUser(userService.findById(bookingRequest.getUserId()));
         }

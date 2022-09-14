@@ -19,8 +19,8 @@ public class BookingRequest {
     private String pickUpLocation;
     private String dropOffLocation;
     private String status;
-
     private int driverId;
     private int userId;
     private int vehicleId;
+    private double distance;
 }

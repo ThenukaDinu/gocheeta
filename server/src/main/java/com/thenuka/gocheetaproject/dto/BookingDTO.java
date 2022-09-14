@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class BookingDTO {
     private int id;
     private double price;
+    private double distance;
     private LocalDateTime tripPlacedTime;
     private LocalDateTime tripScheduledTime;
     private LocalDateTime tripStartTime;

@@ -21,6 +21,8 @@ public class Booking {
     @Nullable
     private double price;
     @Nullable
+    private double distance;
+    @Nullable
     private LocalDateTime tripPlacedTime;
     @Nullable
     private LocalDateTime tripScheduledTime;

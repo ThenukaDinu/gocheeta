@@ -1,0 +1,15 @@
+.Booking {
+  position: relative;
+  .search-box-container {
+    min-width: 20vw;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 2rem;
+    padding: 1.5rem 1rem;
+    top: 0.6rem;
+    z-index: 999;
+    background-color: #121212;
+    border-radius: 0.7rem;
+  }
+}
