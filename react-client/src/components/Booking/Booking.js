@@ -1,18 +1,17 @@
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {
   useJsApiLoader,
   GoogleMap,
-  Marker,
   Autocomplete,
   DirectionsRenderer,
 } from '@react-google-maps/api';
 import { useRef, useState } from 'react';
 import './Booking.scss';
-import { FaLocationArrow, FaTimes } from 'react-icons/fa';
-import { Box } from '@mui/system';
-import { CircularProgress, Grid, TextField } from '@mui/material';
+import { CircularProgress, Grid, Fab } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import PlaceBookingModal from './PlaceBookingModal';
 
-const center = { lat: 48.8584, lng: 2.2945 };
+const center = { lat: 6.876258, lng: 79.858159 };
 
 export default function Booking() {
   const { isLoaded } = useJsApiLoader({
@@ -20,10 +19,12 @@ export default function Booking() {
     libraries: ['places'],
   });
 
+  // eslint-disable-next-line
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef();
@@ -59,8 +60,34 @@ export default function Booking() {
     destiantionRef.current.value = '';
   }
 
+  const placeBooking = () => {
+    setIsModalOpen(true);
+  };
+
+  const myStyle = {
+    maxHeight: '20px',
+    minHeight: '20px',
+    minWidth: '20px',
+    maxWidth: '20px',
+    marginTop: '5px',
+    marginLeft: '2rem',
+  };
+
+  const renderPlaceBooking = () => {
+    return isModalOpen ? (
+      <PlaceBookingModal open={isModalOpen} handleClose={handleClose} />
+    ) : (
+      <></>
+    );
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <Grid container className='Booking'>
+      {renderPlaceBooking()}
       <Grid
         item
         container
@@ -79,34 +106,64 @@ export default function Booking() {
           justifyContent={'center'}
           sx={{ maxWidth: '37vw' }}
         >
-          <TextField
-            variant='filled'
-            name='origin'
-            type='text'
-            label='From'
-            fullWidth={false}
-            sx={{ marginRight: '2rem' }}
-            size='small'
-          />
-          <TextField
-            variant='filled'
-            name='origin'
-            type='text'
-            label='To'
-            fullWidth={false}
-            sx={{ marginRight: '2rem' }}
-            size='small'
-          />
-          <LoadingButton
-            variant='contained'
-            color='primary'
-            size='medium'
-            fullWidth={false}
-            onClick={null}
-            loading={false}
-          >
-            Calculate Distance
-          </LoadingButton>
+          <Autocomplete>
+            <input
+              className='fromInputText'
+              type='text'
+              name='from'
+              ref={originRef}
+            />
+          </Autocomplete>
+          <Autocomplete>
+            <input
+              className='toInputText'
+              type='text'
+              name='to'
+              ref={destiantionRef}
+            />
+          </Autocomplete>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <LoadingButton
+              variant='contained'
+              color='info'
+              size='medium'
+              fullWidth={false}
+              onClick={calculateRoute}
+              loading={false}
+              style={{ marginBottom: '1.4rem' }}
+            >
+              Calculate Distance
+            </LoadingButton>
+            <LoadingButton
+              variant='contained'
+              color='success'
+              size='medium'
+              fullWidth={false}
+              onClick={placeBooking}
+              loading={false}
+              disabled={duration === '' || distance === ''}
+            >
+              Place Booking
+            </LoadingButton>
+          </div>
+          <Grid item xs={12}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <h4 style={{ marginRight: '2rem' }}>distance: {distance}</h4>
+              <h4>duration: {duration}</h4>
+              <Fab
+                sx={{ marginLeft: 2 }}
+                className='icon'
+                color='primary'
+                aria-label='add'
+                size='small'
+                onClick={clearRoute}
+                style={myStyle}
+                disabled={duration === '' && distance === ''}
+              >
+                <CloseOutlinedIcon fontSize='small' style={{ width: '15px' }} />
+              </Fab>
+            </div>
+          </Grid>
         </Grid>
       </Grid>
       <Grid
@@ -128,11 +185,9 @@ export default function Booking() {
           }}
           onLoad={(map) => setMap(map)}
         >
-          <Marker position={center} />
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />
           )}
-          //{' '}
         </GoogleMap>
       </Grid>
     </Grid>

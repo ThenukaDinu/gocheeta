@@ -12,6 +12,7 @@ import com.thenuka.gocheetaproject.requests.BookingRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,15 +86,36 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking convertRequestToEntity(BookingRequest bookingRequest, Booking booking) {
-        booking.setTripPlacedTime(bookingRequest.getTripPlacedTime());
-        booking.setTripScheduledTime(bookingRequest.getTripScheduledTime());
-        booking.setTripStartTime(bookingRequest.getTripStartTime());
-        booking.setTripFinishedTime(bookingRequest.getTripFinishedTime());
-        booking.setTripCanceledTime(bookingRequest.getTripCanceledTime());
-        booking.setPickUpLocation(bookingRequest.getPickUpLocation());
-        booking.setDropOffLocation(bookingRequest.getDropOffLocation());
-        booking.setStatus(publicEnum.BookingStatus.valueOf(bookingRequest.getStatus()));
-        booking.setDistance(bookingRequest.getDistance());
+        if (StringUtils.hasText(bookingRequest.getTripPlacedTime().toString())) {
+            booking.setTripPlacedTime(bookingRequest.getTripPlacedTime());
+        }
+        if (StringUtils.hasText(bookingRequest.getTripScheduledTime().toString())) {
+            booking.setTripScheduledTime(bookingRequest.getTripScheduledTime());
+        }
+        if (StringUtils.hasText(bookingRequest.getTripStartTime().toString())) {
+            booking.setTripStartTime(bookingRequest.getTripStartTime());
+        }
+        if (StringUtils.hasText(bookingRequest.getTripFinishedTime().toString())) {
+            booking.setTripFinishedTime(bookingRequest.getTripFinishedTime());
+        }
+        if (StringUtils.hasText(bookingRequest.getTripCanceledTime().toString())) {
+            booking.setTripCanceledTime(bookingRequest.getTripCanceledTime());
+        }
+        if (StringUtils.hasText(bookingRequest.getPickUpLocation())) {
+            booking.setPickUpLocation(bookingRequest.getPickUpLocation());
+        }
+        if (StringUtils.hasText(bookingRequest.getDropOffLocation())) {
+            booking.setDropOffLocation(bookingRequest.getDropOffLocation());
+        }
+        if (StringUtils.hasText(bookingRequest.getStatus())) {
+            booking.setStatus(publicEnum.BookingStatus.valueOf(bookingRequest.getStatus()));
+        }
+        if (bookingRequest.getDistance() > 0) {
+            booking.setDistance(bookingRequest.getDistance());
+        }
+        if (bookingRequest.getDuration() > 0) {
+            booking.setDuration(bookingRequest.getDuration());
+        }
         if (userService.existsById(bookingRequest.getUserId())) {
             booking.setUser(userService.findById(bookingRequest.getUserId()));
         }

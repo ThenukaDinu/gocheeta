@@ -23,4 +23,5 @@ public class BookingRequest {
     private int userId;
     private int vehicleId;
     private double distance;
+    private double duration;
 }

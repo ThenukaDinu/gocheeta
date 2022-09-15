@@ -11,6 +11,7 @@ public class BookingDTO {
     private int id;
     private double price;
     private double distance;
+    private double duration;
     private LocalDateTime tripPlacedTime;
     private LocalDateTime tripScheduledTime;
     private LocalDateTime tripStartTime;

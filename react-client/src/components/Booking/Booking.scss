@@ -7,9 +7,18 @@
     transform: translate(-50%);
     margin-top: 2rem;
     padding: 1.5rem 1rem;
-    top: 0.6rem;
+    top: 0.2rem;
     z-index: 999;
-    background-color: #121212;
+    background-color: #252525;
     border-radius: 0.7rem;
+  }
+  .fromInputText,
+  .toInputText {
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+  }
+  .fromInputText,
+  .toInputText {
+    margin-right: 1.5rem;
   }
 }
