@@ -73,7 +73,7 @@ export default function MyBookings() {
                 >
                   <span>Distance: </span>
                   <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
-                    {b.distance}
+                    {b.distance} KM
                   </span>
                 </div>
                 <div
@@ -85,7 +85,7 @@ export default function MyBookings() {
                 >
                   <span>Duration: </span>
                   <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
-                    {b.duration}
+                    {b.duration} min
                   </span>
                 </div>
                 <div
@@ -97,7 +97,7 @@ export default function MyBookings() {
                 >
                   <span>Price: </span>
                   <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
-                    {b.price}
+                    LKR. {b.price}
                   </span>
                 </div>
                 <div

@@ -11,7 +11,6 @@ import ConfirmationDialog from '../Common/ConfirmationDialog';
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Box } from '@mui/system';
 import UpdateVehicle from './UpdateVehicle';
 
 export default function VehicleCard({
@@ -105,19 +104,44 @@ export default function VehicleCard({
             <Typography gutterBottom variant='h5' component='div'>
               {vehicle.model}
             </Typography>
-            <Typography variant='subtitle1' color='text.secondary'>
-              <Box sx={{ marginBottom: 1 }}>
-                <b>Type: </b> {vehicle.vehicleType}
-              </Box>
-              <Box sx={{ marginBottom: 1 }}>
-                <b>Brand: </b>
-                {vehicle.brand}
-              </Box>
-              <Box sx={{ marginBottom: 1 }}>
-                <b>Number Plate No: </b>
-                {vehicle.numberPlateNo}{' '}
-              </Box>
-            </Typography>
+            <div style={{ marginBottom: '1rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginTop: '1rem',
+                }}
+              >
+                <span>Type: </span>
+                <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
+                  {vehicle.vehicleType}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginTop: '1rem',
+                }}
+              >
+                <span>Brand: </span>
+                <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
+                  {vehicle.brand}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginTop: '1rem',
+                }}
+              >
+                <span>Number Plate No: </span>
+                <span style={{ marginLeft: '0.7rem', fontWeight: 'bold' }}>
+                  {vehicle.numberPlateNo}{' '}
+                </span>
+              </div>
+            </div>
             {vehicle.branchId && getBranch() ? (
               <Chip
                 sx={{ marginTop: 2 }}
