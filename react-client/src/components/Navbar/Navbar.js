@@ -59,6 +59,9 @@ export default function Navbar() {
             <li>
               <Link to='/bookings'>Bookings</Link>
             </li>
+            <li>
+              <Link to='/my-bookings'>My Bookings</Link>
+            </li>
           </>
         ) : (
           <></>

@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { useSelector } from 'react-redux';
 import Vehicle from '../Vehicle/Vehicle';
 import Booking from '../Booking/Booking';
+import MyBookings from '../Booking/MyBookings';
 
 function App() {
   const userDetails = useSelector((state) => state.user.userDetails);
@@ -59,6 +60,7 @@ function App() {
             <Route path='/drivers' element={<Driver />} />
             <Route path='/vehicles' element={<Vehicle />} />
             <Route path='/bookings' element={<Booking />} />
+            <Route path='/my-bookings' element={<MyBookings />} />
           </Routes>
         </div>
       </ThemeProvider>

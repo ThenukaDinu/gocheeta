@@ -5,26 +5,52 @@ import {
   Autocomplete,
   DirectionsRenderer,
 } from '@react-google-maps/api';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Booking.scss';
 import { CircularProgress, Grid, Fab } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import PlaceBookingModal from './PlaceBookingModal';
+import SelectDataTime from './SelectDataTime';
+import { format } from 'date-fns';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const center = { lat: 6.876258, lng: 79.858159 };
+const libs = ['places'];
 
 export default function Booking() {
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      if (localStorage.getItem('token')) {
+        await axios.get('/secured');
+      }
+    };
+    checkLoggedIn();
+  }, []);
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
+    // googleMapsApiKey: '',
+    libraries: libs,
   });
 
+  const userDetails = useSelector((state) => state.user.userDetails);
   // eslint-disable-next-line
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tripScheduledTime, setTripScheduledTime] = useState({
+    error: false,
+    value: null,
+  });
+  const [selectedVehicle, setSelectedVehicle] = useState({
+    error: false,
+    value: null,
+  });
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
 
   /** @type React.MutableRefObject<HTMLInputElement> */
   const originRef = useRef();
@@ -61,7 +87,35 @@ export default function Booking() {
   }
 
   const placeBooking = () => {
-    setIsModalOpen(true);
+    setIsDateModalOpen(true);
+  };
+
+  const placeBookingFinal = async () => {
+    const formattedDate = format(
+      tripScheduledTime.value,
+      "yyyy-MM-dd'T'kk:mm:00"
+    );
+    const data = {
+      tripScheduledTime: formattedDate,
+      pickUpLocation: originRef.current.value,
+      dropOffLocation: destiantionRef.current.value,
+      status: 'Pending',
+      driverId: selectedVehicle.value.driverId,
+      vehicleId: selectedVehicle.value.id,
+      userId: userDetails.userId,
+      // eslint-disable-next-line
+      distance: parseFloat(distance.replace(/[^\d\.]*/g, '')),
+      // eslint-disable-next-line
+      duration: parseFloat(duration.replace(/[^\d\.]*/g, '')),
+    };
+    const response = await axios.post('/bookings', data);
+    console.log(response);
+    if (response.status === 200) {
+      clearRoute();
+      const updateSuccess = () => toast.success('Booking placed successfully.');
+      updateSuccess();
+      handleClose();
+    }
   };
 
   const myStyle = {
@@ -75,7 +129,13 @@ export default function Booking() {
 
   const renderPlaceBooking = () => {
     return isModalOpen ? (
-      <PlaceBookingModal open={isModalOpen} handleClose={handleClose} />
+      <PlaceBookingModal
+        open={isModalOpen}
+        handleClose={handleClose}
+        placeBookingFinal={placeBookingFinal}
+        setSelectedVehicle={setSelectedVehicle}
+        selectedVehicle={selectedVehicle}
+      />
     ) : (
       <></>
     );
@@ -84,10 +144,30 @@ export default function Booking() {
   const handleClose = () => {
     setIsModalOpen(false);
   };
+  const handleDateModalClose = () => {
+    setIsDateModalOpen(false);
+  };
+  const nextStep = () => {
+    handleDateModalClose();
+    setIsModalOpen(true);
+  };
+
+  const renderSelectDateTime = () => {
+    return (
+      <SelectDataTime
+        open={isDateModalOpen}
+        handleClose={handleDateModalClose}
+        tripScheduledTime={tripScheduledTime}
+        setTripScheduledTime={setTripScheduledTime}
+        nextStep={nextStep}
+      />
+    );
+  };
 
   return (
     <Grid container className='Booking'>
       {renderPlaceBooking()}
+      {renderSelectDateTime()}
       <Grid
         item
         container
@@ -192,85 +272,4 @@ export default function Booking() {
       </Grid>
     </Grid>
   );
-
-  // return (
-  //   <Flex
-  //     position='relative'
-  //     flexDirection='column'
-  //     alignItems='center'
-  //     h='100vh'
-  //     w='100vw'
-  //   >
-  //     <Box position='absolute' left={0} top={0} h='100%' w='100%'>
-  //       {/* Google Map Box */}
-  //       <GoogleMap
-  //         center={center}
-  //         zoom={15}
-  //         mapContainerStyle={{ width: '100%', height: '100%' }}
-  //         options={{
-  //           zoomControl: false,
-  //           streetViewControl: false,
-  //           mapTypeControl: false,
-  //           fullscreenControl: false,
-  //         }}
-  //         onLoad={(map) => setMap(map)}
-  //       >
-  //         <Marker position={center} />
-  //         {directionsResponse && (
-  //           <DirectionsRenderer directions={directionsResponse} />
-  //         )}
-  //       </GoogleMap>
-  //     </Box>
-  //     <Box
-  //       p={4}
-  //       borderRadius='lg'
-  //       m={4}
-  //       bgColor='white'
-  //       shadow='base'
-  //       minW='container.md'
-  //       zIndex='1'
-  //     >
-  //       <HStack spacing={2} justifyContent='space-between'>
-  //         <Box flexGrow={1}>
-  //           <Autocomplete>
-  //             <Input type='text' placeholder='Origin' ref={originRef} />
-  //           </Autocomplete>
-  //         </Box>
-  //         <Box flexGrow={1}>
-  //           <Autocomplete>
-  //             <Input
-  //               type='text'
-  //               placeholder='Destination'
-  //               ref={destiantionRef}
-  //             />
-  //           </Autocomplete>
-  //         </Box>
-
-  //         <ButtonGroup>
-  //           <Button colorScheme='pink' type='submit' onClick={calculateRoute}>
-  //             Calculate Route
-  //           </Button>
-  //           <IconButton
-  //             aria-label='center back'
-  //             icon={<FaTimes />}
-  //             onClick={clearRoute}
-  //           />
-  //         </ButtonGroup>
-  //       </HStack>
-  //       <HStack spacing={4} mt={4} justifyContent='space-between'>
-  //         <Text>Distance: {distance} </Text>
-  //         <Text>Duration: {duration} </Text>
-  //         <IconButton
-  //           aria-label='center back'
-  //           icon={<FaLocationArrow />}
-  //           isRound
-  //           onClick={() => {
-  //             map.panTo(center);
-  //             map.setZoom(15);
-  //           }}
-  //         />
-  //       </HStack>
-  //     </Box>
-  //   </Flex>
-  // );
 }

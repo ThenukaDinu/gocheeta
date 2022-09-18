@@ -43,6 +43,8 @@ public class BookingService implements IBookingService {
         bookingDTO.setTripStartTime(book.getTripStartTime());
         bookingDTO.setPickUpLocation(book.getPickUpLocation());
         bookingDTO.setDropOffLocation(book.getDropOffLocation());
+        bookingDTO.setDistance(book.getDistance());
+        bookingDTO.setDuration(book.getDuration());
         if (book.getVehicle() != null) bookingDTO.setVehicleId(book.getVehicle().getId());
         if (book.getDriver() != null)  bookingDTO.setDriverId(book.getDriver().getId());
         if (book.getUser() != null)  bookingDTO.setUserId(book.getUser().getId());
@@ -86,19 +88,19 @@ public class BookingService implements IBookingService {
 
     @Override
     public Booking convertRequestToEntity(BookingRequest bookingRequest, Booking booking) {
-        if (StringUtils.hasText(bookingRequest.getTripPlacedTime().toString())) {
+        if (bookingRequest.getTripPlacedTime() != null) {
             booking.setTripPlacedTime(bookingRequest.getTripPlacedTime());
         }
-        if (StringUtils.hasText(bookingRequest.getTripScheduledTime().toString())) {
+        if (bookingRequest.getTripScheduledTime() != null) {
             booking.setTripScheduledTime(bookingRequest.getTripScheduledTime());
         }
-        if (StringUtils.hasText(bookingRequest.getTripStartTime().toString())) {
+        if (bookingRequest.getTripStartTime() != null) {
             booking.setTripStartTime(bookingRequest.getTripStartTime());
         }
-        if (StringUtils.hasText(bookingRequest.getTripFinishedTime().toString())) {
+        if (bookingRequest.getTripFinishedTime() != null) {
             booking.setTripFinishedTime(bookingRequest.getTripFinishedTime());
         }
-        if (StringUtils.hasText(bookingRequest.getTripCanceledTime().toString())) {
+        if (bookingRequest.getTripCanceledTime() != null) {
             booking.setTripCanceledTime(bookingRequest.getTripCanceledTime());
         }
         if (StringUtils.hasText(bookingRequest.getPickUpLocation())) {

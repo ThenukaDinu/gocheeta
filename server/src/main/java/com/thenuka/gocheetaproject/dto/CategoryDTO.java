@@ -13,6 +13,4 @@ public class CategoryDTO {
     @Nullable
     private String description;
     private String name;
-    @Nullable
-    private ArrayList<VehicleDTO> vehicles;
 }

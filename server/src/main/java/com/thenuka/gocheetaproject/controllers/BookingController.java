@@ -93,6 +93,15 @@ public class BookingController {
     @RequestMapping(value = "/{bookingId}", method = RequestMethod.PUT)
     public ResponseEntity<?> update(@RequestBody BookingRequest bookingRequest, @PathVariable(value = "bookingId") int id) {
         try {
+            if (bookingRequest.getStatus() == "TripStarted") {
+                bookingRequest.setTripStartTime(LocalDateTime.now());
+            }
+            if (bookingRequest.getStatus() == "TripEnded") {
+                bookingRequest.setTripFinishedTime(LocalDateTime.now());
+            }
+            if (bookingRequest.getStatus() == "Canceled") {
+                bookingRequest.setTripCanceledTime(LocalDateTime.now());
+            }
             BookingDTO bookingDTO = bookingService.update(id, bookingRequest);
             if (bookingDTO == null) {
                 return new ResponseEntity<>("No records found with given id", HttpStatus.BAD_REQUEST);

@@ -76,11 +76,6 @@ public class CategoryService implements ICategoryService {
         categoryDTO.setId(category.getId());
         categoryDTO.setDescription(category.getDescription());
         categoryDTO.setName(category.getName());
-        ArrayList<VehicleDTO> vehicleDTOS = new ArrayList<>();
-        for (Vehicle vehicle : category.getVehicles()) {
-            vehicleDTOS.add(vehicleService.convertEntityToDto(vehicle));
-        }
-        categoryDTO.setVehicles(vehicleDTOS);
         return categoryDTO;
     }
 
