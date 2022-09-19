@@ -27,6 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: "react-client/package-lock.json"
-    - run: npm ci
-    - run: npm run build --if-present --prefix react-client ${COMMAND}
-    - run: npm test --prefix react-client ${COMMAND}
+    - run: npm --prefix react-client ci
+    - run: npm --prefix react-client run build --if-present
+    - run: npm --prefix react-client test --prefix react-client
