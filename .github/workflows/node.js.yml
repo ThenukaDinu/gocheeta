@@ -29,4 +29,3 @@ jobs:
         cache-dependency-path: "react-client/package-lock.json"
     - run: npm --prefix react-client ci
     - run: npm --prefix react-client run build --if-present
-    - run: npm --prefix react-client test
