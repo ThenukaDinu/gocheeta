@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import Vehicle from '../Vehicle/Vehicle';
 import Booking from '../Booking/Booking';
 import MyBookings from '../Booking/MyBookings';
+import Reports from '../Reports/Reports';
 
 function App() {
   const userDetails = useSelector((state) => state.user.userDetails);
@@ -61,6 +62,7 @@ function App() {
             <Route path='/vehicles' element={<Vehicle />} />
             <Route path='/bookings' element={<Booking />} />
             <Route path='/my-bookings' element={<MyBookings />} />
+            <Route path='/reports' element={<Reports />} />
           </Routes>
         </div>
       </ThemeProvider>

@@ -48,7 +48,7 @@ export default function Navbar() {
               <Link to='/branches'>Branches</Link>
             </li>
             <li>
-              <Link to='reports'>Reports</Link>
+              <Link to='/reports'>Reports</Link>
             </li>
           </>
         ) : (
